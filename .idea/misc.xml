@@ -5,7 +5,10 @@
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.15534420289855072" />
         <entry key="..\:/Users/Rafal/StudioProjects/Mafia_XML/app/src/main/res/drawable/bg_input_view.xml" value="0.123" />
-        <entry key="..\:/Users/Rafal/StudioProjects/Mafia_XML/app/src/main/res/layout/fragment_start.xml" value="0.5541666666666667" />
+        <entry key="..\:/Users/Rafal/StudioProjects/Mafia_XML/app/src/main/res/layout/activity_start.xml" value="0.18535681186283595" />
+        <entry key="..\:/Users/Rafal/StudioProjects/Mafia_XML/app/src/main/res/layout/fragment_character.xml" value="0.31354166666666666" />
+        <entry key="..\:/Users/Rafal/StudioProjects/Mafia_XML/app/src/main/res/layout/fragment_start.xml" value="0.25" />
+        <entry key="..\:/Users/Rafal/StudioProjects/Mafia_XML/app/src/main/res/layout/item_character.xml" value="0.31354166666666666" />
         <entry key="..\:/Users/Rafal/StudioProjects/Mafia_XML/app/src/main/res/layout/view_input.xml" value="0.39166666666666666" />
         <entry key="app/src/main/res/layout/activity_start.xml" value="0.3375" />
         <entry key="app/src/main/res/layout/fragment_start.xml" value="0.33645833333333336" />

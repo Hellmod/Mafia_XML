@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import pl.rafalmiskiewicz.mafia.data.common.PlayerItem
 import pl.rafalmiskiewicz.mafia.databinding.FragmentStartBinding
@@ -66,7 +67,10 @@ class PlayerListFragment @Inject constructor() : BaseFragment() {
 
     private fun handleEvent(event: PlayerListEvent) {
         when (event) {
-
+            PlayerListEvent.NavigateToCharacter -> {
+                val action = PlayerListFragmentDirections.actionStartFragmentToCharacterFragment()
+                findNavController().navigate(action)
+            }
         }
     }
 }

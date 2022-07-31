@@ -3,12 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_start"
-    app:startDestination="@id/benefitsFragment">
+    app:startDestination="@id/startFragment">
 
     <fragment
-        android:id="@+id/benefitsFragment"
+        android:id="@+id/startFragment"
         android:name="pl.rafalmiskiewicz.mafia.ui.playerList.PlayerListFragment"
-        android:label="BenefitsFragment"
-        tools:layout="@layout/activity_start">
+        android:label="StartFragment"
+        tools:layout="@layout/fragment_start">
+        <action
+            android:id="@+id/action_startFragment_to_characterFragment"
+            app:destination="@id/characterFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/characterFragment"
+        android:name="pl.rafalmiskiewicz.mafia.ui.characterList.CharacterListFragment"
+        android:label="CharacterFragment"
+        tools:layout="@layout/fragment_character">
     </fragment>
 </navigation>

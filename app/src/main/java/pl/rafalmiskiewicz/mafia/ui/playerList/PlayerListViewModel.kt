@@ -27,4 +27,8 @@ class PlayerListViewModel @Inject constructor() : BaseViewModel<PlayerListEvent>
         )
         playerList.value = newPlayerList ?: emptyList()
     }
+
+    fun onNextClicked() {
+        sendEvent(PlayerListEvent.NavigateToCharacter)
+    }
 }
