@@ -13,10 +13,12 @@
         android:layout_width="match_parent"
         android:layout_height="716dp">
 
-        <EditText
+        <pl.rafalmiskiewicz.mafia.util.views.InputView
             android:id="@+id/editText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            app:content="@={viewModel.playerName}"
+            app:label="Imię: "
             app:layout_constraintEnd_toStartOf="@+id/button"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

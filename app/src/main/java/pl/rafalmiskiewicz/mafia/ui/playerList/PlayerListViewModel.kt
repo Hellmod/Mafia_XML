@@ -10,6 +10,7 @@ import javax.inject.Inject
 class PlayerListViewModel @Inject constructor() : BaseViewModel<PlayerListEvent>() {
 
     val playerList = MutableLiveData<List<PlayerItem>>()
+    val playerName = MutableLiveData<String>()
 
     fun onProfileClicked(id: Int) {
         playerList.value = playerList.value?.filter { it.id != id }
@@ -21,19 +22,9 @@ class PlayerListViewModel @Inject constructor() : BaseViewModel<PlayerListEvent>
         newPlayerList?.add(
             PlayerItem(
                 id = newPlayerList.maxOf { it.id } + 1,
-                name = " Marzenka Peperka"
+                name = playerName.value ?: "ERROR"
             )
         )
-        newPlayerList.let {
-            playerList.value = it
-            if (it != null) {
-                it += PlayerItem(
-                    id = 1,
-                    name = " Marzenka Peperka"
-                )
-            }
-        }
-
-
+        playerList.value = newPlayerList ?: emptyList()
     }
 }

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/inputLabelTv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/DefaultBlackTextBold"
+        android:gravity="start"
+        android:textSize="@dimen/text_size_small"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="E-mail" />
+
+    <TextView
+        android:id="@+id/inputHintTv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/inputLabelTv"
+        tools:text="Bottom left on insurance card" />
+
+    <EditText
+        android:id="@+id/inputEt"
+        style="@style/Autocomplete"
+        android:layout_width="@dimen/empty"
+        android:layout_height="64dp"
+        android:layout_marginTop="@dimen/margin_small"
+        android:background="@drawable/bg_input_view"
+        android:dropDownVerticalOffset="2dp"
+        android:gravity="bottom"
+        android:imeOptions="actionDone"
+        android:padding="@dimen/padding_large"
+        android:popupElevation="1dp"
+        android:saveEnabled="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inputHintTv" />
+
+</merge>
