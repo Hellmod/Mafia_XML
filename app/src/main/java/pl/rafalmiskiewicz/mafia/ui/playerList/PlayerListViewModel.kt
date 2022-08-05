@@ -31,7 +31,9 @@ class PlayerListViewModel @Inject constructor() : BaseViewModel<PlayerListEvent>
     }
 
     fun onProfileClicked(id: Int) {
-        playerList.value = playerList.value?.filter { it.id != id }
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteUser(id)
+        }
     }
 
     fun onAddClicked() {
