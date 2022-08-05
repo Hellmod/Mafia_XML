@@ -1,4 +1,4 @@
-package pl.rafalmiskiewicz.mafia.data.dto
+package pl.rafalmiskiewicz.mafia.util.db
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
@@ -11,7 +11,7 @@ interface UserDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addUser(user: User)
 
-    @Query("SELECT * FROM user_table")
+    @Query("SELECT * FROM User")
     fun readAllData(): LiveData<List<User>>
 
 }

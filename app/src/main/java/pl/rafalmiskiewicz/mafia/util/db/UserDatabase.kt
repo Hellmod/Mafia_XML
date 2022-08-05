@@ -1,4 +1,4 @@
-package pl.rafalmiskiewicz.mafia.data.dto
+package pl.rafalmiskiewicz.mafia.util.db
 
 import android.content.Context
 import androidx.room.Database
@@ -14,17 +14,20 @@ abstract class UserDatabase : RoomDatabase() {
         @Volatile
         private var INSTANCE: UserDatabase? = null
 
-        fun getDatabase(context: Context):UserDatabase{
+        fun getDatabase(context: Context): UserDatabase {
             val tempInstance = INSTANCE
-            if(tempInstance != null){
+            if (tempInstance != null) {
                 return tempInstance
             }
-            synchronized(this){
+            synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     UserDatabase::class.java,
-                    "user_database"
-                ).build()
+                    "Mafia.db"
+                )
+                    //.createFromAsset("database/init_mafia.db")
+                    .build()
+
                 INSTANCE = instance
                 return instance
             }
