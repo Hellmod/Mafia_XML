@@ -2,20 +2,20 @@ package pl.rafalmiskiewicz.mafia.ui.characterList
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import pl.rafalmiskiewicz.mafia.data.common.CharacterItem
 import pl.rafalmiskiewicz.mafia.databinding.ItemCharacterBinding
 import pl.rafalmiskiewicz.mafia.ui.base.BaseAdapter
 import pl.rafalmiskiewicz.mafia.ui.base.BaseHolder
 import pl.rafalmiskiewicz.mafia.ui.base.OnRecyclerListener
+import pl.rafalmiskiewicz.mafia.util.db.CharacterPlayer
 
-class CharacterListAdapter : BaseAdapter<CharacterItem>() {
+class CharacterListAdapter : BaseAdapter<CharacterPlayer>() {
 
-    private var onCharacterClickListener: OnRecyclerListener? = null
+    private var onCharacterPlayerClickListener: OnRecyclerListener? = null
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): BaseHolder<CharacterItem> {
+    ): BaseHolder<CharacterPlayer> {
         return DoctorsListHolder(
             ItemCharacterBinding.inflate(
                 LayoutInflater.from(parent.context),
@@ -25,25 +25,25 @@ class CharacterListAdapter : BaseAdapter<CharacterItem>() {
         )
     }
 
-    override fun onBindViewHolder(holder: BaseHolder<CharacterItem>, position: Int) {
+    override fun onBindViewHolder(holder: BaseHolder<CharacterPlayer>, position: Int) {
         (holder as DoctorsListHolder).bind(
             items[position],
             onRecyclerListener,
-            onCharacterClickListener
+            onCharacterPlayerClickListener
         )
     }
 
-    fun setonCharacterClickListener(listener: OnRecyclerListener?) {
-        this.onCharacterClickListener = listener
+    fun setonCharacterPlayerClickListener(listener: OnRecyclerListener?) {
+        this.onCharacterPlayerClickListener = listener
     }
 
     class DoctorsListHolder(private val itemBinding: ItemCharacterBinding) :
-        BaseHolder<CharacterItem>(itemBinding.root), CharacterListBinder {
+        BaseHolder<CharacterPlayer>(itemBinding.root), CharacterListBinder {
 
-        override fun bind(item: CharacterItem, listener: OnRecyclerListener?) = Unit
+        override fun bind(item: CharacterPlayer, listener: OnRecyclerListener?) = Unit
 
         override fun bind(
-            item: CharacterItem,
+            item: CharacterPlayer,
             listener: OnRecyclerListener?,
             CharacterListener: OnRecyclerListener?
         ) {
@@ -58,7 +58,7 @@ class CharacterListAdapter : BaseAdapter<CharacterItem>() {
     interface CharacterListBinder {
 
         fun bind(
-            item: CharacterItem, listener: OnRecyclerListener?,
+            item: CharacterPlayer, listener: OnRecyclerListener?,
             profileListener: OnRecyclerListener?
         )
     }

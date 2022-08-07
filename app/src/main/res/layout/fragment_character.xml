@@ -18,14 +18,24 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Lista graczy"
+            android:text="Ilość postaci do wybrania: "
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBaseline_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/playersNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.playersAmount}"
+            app:layout_constraintBaseline_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/textView"
+            app:layout_constraintStart_toEndOf="@+id/textView"
+            app:layout_constraintTop_toTopOf="@+id/textView" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/characterListRecycle"
-            data="@{viewModel.characterList}"
+            data="@{viewModel.characterPlayerList}"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"

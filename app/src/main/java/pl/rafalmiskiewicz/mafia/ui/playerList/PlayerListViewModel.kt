@@ -24,7 +24,6 @@ class PlayerListViewModel @Inject constructor() : BaseViewModel<PlayerListEvent>
     private lateinit var repository: UserRepository
 
     fun initDao(context: Context) {
-        Timber.i("RMRM initializing DataBase")
         val userDao = UserDatabase.getDatabase(context).userDao()
         repository = UserRepository(userDao)
         readAllData = repository.readAllData
