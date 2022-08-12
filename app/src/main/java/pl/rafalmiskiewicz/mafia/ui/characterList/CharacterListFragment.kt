@@ -9,7 +9,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import pl.rafalmiskiewicz.mafia.databinding.FragmentCharacterBinding
 import pl.rafalmiskiewicz.mafia.extensions.observeEvent
 import pl.rafalmiskiewicz.mafia.ui.base.BaseFragment
-import androidx.lifecycle.Observer
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -32,13 +31,14 @@ class CharacterListFragment @Inject constructor() : BaseFragment() {
             }
 
         initObservers()
+
         context?.let { mViewModel.initDao(it) }
         mViewModel.readAllData.observe(
-            this,
-            Observer { user ->
-                mViewModel.playerList.value = user
-            }
-        )
+            viewLifecycleOwner
+        ) { user ->
+            mViewModel.playerList.value = user
+            mViewModel._playersAmount.value = user.size.toString()
+        }
 
         return binding.root
     }

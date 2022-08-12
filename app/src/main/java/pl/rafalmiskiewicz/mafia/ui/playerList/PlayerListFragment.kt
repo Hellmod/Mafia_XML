@@ -35,11 +35,10 @@ class PlayerListFragment @Inject constructor() : BaseFragment() {
         initObservers()
         context?.let { mViewModel.initDao(it) }
         mViewModel.readAllData.observe(
-            this,
-            Observer { user ->
-                mViewModel.playerList.value = user
-            }
-        )
+            viewLifecycleOwner
+        ) { user ->
+            mViewModel.playerList.value = user
+        }
         return binding.root
     }
 

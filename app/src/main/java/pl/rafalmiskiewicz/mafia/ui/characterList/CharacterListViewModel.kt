@@ -18,16 +18,28 @@ class CharacterListViewModel @Inject constructor() : BaseViewModel<CharacterList
     val characterPlayerList = MutableLiveData<List<CharacterPlayer>>()
 
     val playerList = MutableLiveData<List<User>>()
-    val playersAmount = MutableLiveData<Int>()
+    val _playersAmount = MutableLiveData<String>("0")
+    val playersAmount: LiveData<String> = _playersAmount
 
     lateinit var readAllData: LiveData<List<User>>
     private lateinit var repository: UserRepository
 
+    init {
+        characterPlayerList.value = listOf(
+            CharacterPlayer(
+                id = 0,
+                name = "Marynarz"
+            ),
+            CharacterPlayer(
+                id = 1,
+                name = "Pirat"
+            ),
+        )
+    }
+
     fun initDao(context: Context) {
-        Timber.i("RMRM initializing DataBase")
         val userDao = UserDatabase.getDatabase(context).userDao()
         repository = UserRepository(userDao)
         readAllData = repository.readAllData
-        playersAmount.value = playerList.value?.size ?: 0
     }
 }
