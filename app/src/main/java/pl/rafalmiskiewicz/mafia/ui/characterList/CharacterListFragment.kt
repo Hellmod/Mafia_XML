@@ -8,6 +8,7 @@ import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import pl.rafalmiskiewicz.mafia.databinding.FragmentCharacterBinding
 import pl.rafalmiskiewicz.mafia.extensions.observeEvent
+import pl.rafalmiskiewicz.mafia.extensions.toast
 import pl.rafalmiskiewicz.mafia.ui.base.BaseFragment
 import javax.inject.Inject
 
@@ -37,7 +38,8 @@ class CharacterListFragment @Inject constructor() : BaseFragment() {
             viewLifecycleOwner
         ) { user ->
             mViewModel.playerList.value = user
-            mViewModel._playersAmount.value = user.size.toString()
+            mViewModel.playersAmount.value = user.size
+            mViewModel.setCharacterLeft(user.size)
         }
 
         return binding.root
@@ -51,7 +53,22 @@ class CharacterListFragment @Inject constructor() : BaseFragment() {
 
     private fun handleEvent(event: CharacterListEvent) {
         when (event) {
-
+            CharacterListEvent.OnNextClick -> {
+                onNextClick()
+            }
         }
+    }
+
+    private fun onNextClick() {
+        if (checkIsNumberCharacterCorrect()) {
+            toast("Nieprawidłowa liczba postaci")
+            return
+        }
+
+    }
+
+    private fun checkIsNumberCharacterCorrect(): Boolean {
+        val list = ArrayList(mViewModel.characterPlayerList.value)
+        return (((mViewModel.playersAmount.value?.minus(list.sumOf { it.count })) ?: -1) != 0)
     }
 }

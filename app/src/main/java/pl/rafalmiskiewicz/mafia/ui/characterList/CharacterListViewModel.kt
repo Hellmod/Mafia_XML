@@ -11,7 +11,6 @@ import pl.rafalmiskiewicz.mafia.util.db.CharacterPlayer
 import pl.rafalmiskiewicz.mafia.util.db.User
 import pl.rafalmiskiewicz.mafia.util.db.UserDatabase
 import pl.rafalmiskiewicz.mafia.util.db.UserRepository
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,8 +19,9 @@ class CharacterListViewModel @Inject constructor() : BaseViewModel<CharacterList
     val characterPlayerList = MutableLiveData<List<CharacterPlayer>>()
 
     val playerList = MutableLiveData<List<User>>()
-    val _playersAmount = MutableLiveData<String>("0")
-    val playersAmount: LiveData<String> = _playersAmount
+    val playersAmount = MutableLiveData(0)
+    private val _characterLeft = MutableLiveData<String>("0")
+    val characterLeft: LiveData<String> = _characterLeft
 
     lateinit var readAllData: LiveData<List<User>>
     private lateinit var repository: UserRepository
@@ -41,6 +41,7 @@ class CharacterListViewModel @Inject constructor() : BaseViewModel<CharacterList
                 amount = 4
             ),
         )
+        calculateCharacterToChoose()
     }
 
     fun initDao(context: Context) {
@@ -68,11 +69,23 @@ class CharacterListViewModel @Inject constructor() : BaseViewModel<CharacterList
             count = amountToDrop
         )
         updateList(list)
-
-       Timber.i("RMRM $position , $diff")
+        calculateCharacterToChoose()
     }
 
     private fun updateList(list: List<CharacterPlayer>?) {
         characterPlayerList.value = ArrayList(list)
+    }
+
+    fun setCharacterLeft(amaount: Int) {
+        _characterLeft.value = amaount.toString()
+    }
+
+    private fun calculateCharacterToChoose() {
+        val list = ArrayList(characterPlayerList.value)
+        _characterLeft.value = (playersAmount.value?.minus(list.sumOf { it.count })).toString()
+    }
+
+    fun onNextClicked() {
+        sendEvent(CharacterListEvent.OnNextClick)
     }
 }
