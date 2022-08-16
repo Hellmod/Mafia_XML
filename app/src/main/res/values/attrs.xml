@@ -5,4 +5,13 @@
     <declare-styleable name="InputView">
         <attr name="label" />
     </declare-styleable>
+
+    <declare-styleable name="CounterView">
+        <attr name="cvMode" format="enum">
+            <enum name="ThrowOut" value="0"/>
+            <enum name="Cart" value="1"/>
+        </attr>
+        <attr name="cvText" format="string" />
+        <attr name="cvRightDrawable" format="reference" />
+    </declare-styleable>
 </resources>

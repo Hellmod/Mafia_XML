@@ -31,5 +31,9 @@
     <dimen name="margin_xxLarge">48dp</dimen>
 
     <dimen name="input_view_corners">8dp</dimen>
+    <dimen name="counter_btn_active_width">32dp</dimen>
+    <dimen name="button_counter_size">32dp</dimen>
+    <dimen name="counter_icon_size">20dp</dimen>
+    <dimen name="counter_btn_inactive_width">70dp</dimen>
 
 </resources>

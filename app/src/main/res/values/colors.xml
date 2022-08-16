@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="transparent">@android:color/transparent</color>
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
@@ -11,4 +12,9 @@
     <color name="greyDark">#999999</color>
     <color name="colorPrimary">#35BDB6</color>
     <color name="greyLight">#F2F2F2</color>
+
+    <color name="colorRipple">#D1D1D1</color>
+    <color name="colorBgSelected">#EEEEEE</color>
+    <color name="textPrimary">#343434</color>
+    <color name="textPrimaryLight">#45343434</color>
 </resources>

@@ -6,6 +6,7 @@ import pl.rafalmiskiewicz.mafia.databinding.ItemPlayerBinding
 import pl.rafalmiskiewicz.mafia.ui.base.BaseAdapter
 import pl.rafalmiskiewicz.mafia.ui.base.BaseHolder
 import pl.rafalmiskiewicz.mafia.ui.base.OnRecyclerListener
+import pl.rafalmiskiewicz.mafia.ui.base.ProductCommonClick
 import pl.rafalmiskiewicz.mafia.util.db.User
 
 class PlayerListAdapter : BaseAdapter<User>() {
@@ -49,7 +50,7 @@ class PlayerListAdapter : BaseAdapter<User>() {
         ) {
             itemBinding.apply {
                 playerName.text = item.name
-                playerName.setOnClickListener { playerListener?.onClick(item.id) }
+                playerName.setOnClickListener { playerListener?.onClick(ProductCommonClick.ItemClick,item.id) }
                 playerId.text = item.id.toString()
             }
         }

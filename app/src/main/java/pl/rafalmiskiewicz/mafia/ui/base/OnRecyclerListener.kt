@@ -1,5 +1,5 @@
 package pl.rafalmiskiewicz.mafia.ui.base
 
 interface OnRecyclerListener {
-    fun onClick(pos: Int)
+    fun onClick(type:ClickType, pos:Int)
 }

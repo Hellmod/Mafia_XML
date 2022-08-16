@@ -1,0 +1,15 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android" xmlns:aapt="http://schemas.android.com/aapt"
+    android:viewportWidth="7.9375"
+    android:viewportHeight="7.9375"
+    android:width="@dimen/counter_icon_size"
+    android:height="@dimen/counter_icon_size">
+    <group
+        android:translateY="-289.0625">
+        <path
+            android:pathData="M3.9672 302.3127L3.004985 302.3127L3.004985 301.998L3.9672 301.998L3.9672 302.3127Z"
+            android:fillColor="#343434" />
+        <path
+            android:pathData="M0.66145832 292.41938v1.21543H3.3661344v2.70371h1.220461v-2.70371h2.6894462v-1.21543H4.5865954v-2.69544h-1.220461v2.69544z"
+            android:fillColor="#343434" />
+    </group>
+</vector>

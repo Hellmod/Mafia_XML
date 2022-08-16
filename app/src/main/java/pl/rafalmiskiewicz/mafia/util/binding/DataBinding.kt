@@ -26,3 +26,10 @@ fun setOnPlayerClickListeners(
         )
     }
 }
+
+@BindingAdapter("onRecyclerClick")
+fun setRecyclerListener(recyclerView: RecyclerView, onRecyclerListener: OnRecyclerListener) {
+    if (recyclerView.adapter is BaseAdapter<*>) {
+        (recyclerView.adapter as BaseAdapter<*>).setListener(onRecyclerListener)
+    }
+}

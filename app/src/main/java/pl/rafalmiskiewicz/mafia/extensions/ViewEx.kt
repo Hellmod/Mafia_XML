@@ -1,10 +1,13 @@
 package pl.rafalmiskiewicz.mafia.extensions
 
+import android.animation.ValueAnimator
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.EditText
 import android.widget.TextView
+import androidx.core.animation.doOnEnd
 import androidx.core.content.ContextCompat
 
 fun View.hide() {
@@ -18,7 +21,6 @@ fun View.invisible() {
 fun View.show() {
     this.visibility = View.VISIBLE
 }
-
 
 fun TextView.setColor(color: Int) {
     setTextColor(context.getColor(color))
@@ -42,4 +44,21 @@ inline fun EditText.afterTextChanged(crossinline action: (text: String?) -> Unit
 
         override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
     })
+}
+
+fun View.animateWidth(newWidth: Int, duration: Long = 100L, onAnimationEnd: () -> Unit = {}) {
+    val slideAnimator = ValueAnimator
+        .ofInt(width, newWidth)
+        .setDuration(duration)
+
+    slideAnimator.addUpdateListener { animation1: ValueAnimator ->
+        val value = animation1.animatedValue as Int
+        layoutParams.width = value
+        requestLayout()
+    }
+    slideAnimator.doOnEnd {
+        onAnimationEnd()
+    }
+    slideAnimator.interpolator = AccelerateDecelerateInterpolator()
+    slideAnimator.start()
 }

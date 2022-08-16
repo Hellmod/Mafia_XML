@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import pl.rafalmiskiewicz.mafia.ui.base.BaseViewModel
+import pl.rafalmiskiewicz.mafia.ui.base.ClickType
 import pl.rafalmiskiewicz.mafia.util.db.User
 import pl.rafalmiskiewicz.mafia.util.db.UserDatabase
 import pl.rafalmiskiewicz.mafia.util.db.UserRepository
@@ -29,7 +30,7 @@ class PlayerListViewModel @Inject constructor() : BaseViewModel<PlayerListEvent>
         readAllData = repository.readAllData
     }
 
-    fun onProfileClicked(id: Int) {
+    fun onProfileClicked(type: ClickType , id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteUser(id)
         }

@@ -7,5 +7,7 @@ import androidx.room.PrimaryKey
 data class CharacterPlayer(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    val name: String
+    val name: String,
+    val count: Int,
+    val amount: Int
 )
