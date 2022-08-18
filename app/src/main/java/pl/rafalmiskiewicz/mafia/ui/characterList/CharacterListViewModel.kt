@@ -1,6 +1,5 @@
 package pl.rafalmiskiewicz.mafia.ui.characterList
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -9,8 +8,6 @@ import pl.rafalmiskiewicz.mafia.ui.base.ClickType
 import pl.rafalmiskiewicz.mafia.ui.base.ProductCommonClick
 import pl.rafalmiskiewicz.mafia.util.db.CharacterPlayer
 import pl.rafalmiskiewicz.mafia.util.db.User
-import pl.rafalmiskiewicz.mafia.util.db.UserDatabase
-import pl.rafalmiskiewicz.mafia.util.db.UserRepository
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,9 +19,6 @@ class CharacterListViewModel @Inject constructor() : BaseViewModel<CharacterList
     val playersAmount = MutableLiveData(0)
     private val _characterLeft = MutableLiveData<String>("0")
     val characterLeft: LiveData<String> = _characterLeft
-
-    lateinit var readAllData: LiveData<List<User>>
-    private lateinit var repository: UserRepository
 
     init {
         characterPlayerList.value = listOf(
@@ -42,12 +36,6 @@ class CharacterListViewModel @Inject constructor() : BaseViewModel<CharacterList
             ),
         )
         calculateCharacterToChoose()
-    }
-
-    fun initDao(context: Context) {
-        val userDao = UserDatabase.getDatabase(context).userDao()
-        repository = UserRepository(userDao)
-        readAllData = repository.readAllData
     }
 
     fun itemClick(type: ClickType, position: Int) {

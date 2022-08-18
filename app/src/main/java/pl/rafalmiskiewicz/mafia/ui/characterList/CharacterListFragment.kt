@@ -1,15 +1,20 @@
 package pl.rafalmiskiewicz.mafia.ui.characterList
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LiveData
 import dagger.hilt.android.AndroidEntryPoint
 import pl.rafalmiskiewicz.mafia.databinding.FragmentCharacterBinding
 import pl.rafalmiskiewicz.mafia.extensions.observeEvent
 import pl.rafalmiskiewicz.mafia.extensions.toast
 import pl.rafalmiskiewicz.mafia.ui.base.BaseFragment
+import pl.rafalmiskiewicz.mafia.util.db.User
+import pl.rafalmiskiewicz.mafia.util.db.UserDatabase
+import pl.rafalmiskiewicz.mafia.util.db.UserRepository
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -18,6 +23,9 @@ class CharacterListFragment @Inject constructor() : BaseFragment() {
     private val mViewModel: CharacterListViewModel by viewModels()
 
     private lateinit var binding: FragmentCharacterBinding
+
+    lateinit var readAllData: LiveData<List<User>>
+    private lateinit var repository: UserRepository
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,8 +41,10 @@ class CharacterListFragment @Inject constructor() : BaseFragment() {
 
         initObservers()
 
-        context?.let { mViewModel.initDao(it) }
-        mViewModel.readAllData.observe(
+        context?.let {
+            initDao(it)
+        }
+        readAllData.observe(
             viewLifecycleOwner
         ) { user ->
             mViewModel.playerList.value = user
@@ -43,6 +53,12 @@ class CharacterListFragment @Inject constructor() : BaseFragment() {
         }
 
         return binding.root
+    }
+
+    fun initDao(context: Context) {
+        val userDao = UserDatabase.getDatabase(context).userDao()
+        repository = UserRepository(userDao)
+        readAllData = repository.readAllData
     }
 
     private fun initObservers() {
