@@ -22,8 +22,7 @@ class PlayerListViewModel @Inject constructor() : BaseViewModel<PlayerListEvent>
             PlayerListEvent.OnAddClicked(
                 User(
                     id = 0,
-                    name = playerName.value ?: "ERROR",
-                    character = null
+                    name = playerName.value ?: "ERROR"
                 )
             )
         )

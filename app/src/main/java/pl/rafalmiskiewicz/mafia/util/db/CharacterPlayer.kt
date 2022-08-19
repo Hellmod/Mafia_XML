@@ -8,6 +8,6 @@ data class CharacterPlayer(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val name: String,
-    val count: Int,
+    var count: Int,
     val amount: Int
 )

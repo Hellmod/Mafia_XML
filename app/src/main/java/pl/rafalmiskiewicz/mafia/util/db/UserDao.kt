@@ -15,4 +15,7 @@ interface UserDao {
     @Query("SELECT * FROM User")
     fun readAllData(): LiveData<List<User>>
 
+    @Update
+    fun updateSong(songs: List<User>): Int
+
 }

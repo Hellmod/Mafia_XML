@@ -25,6 +25,7 @@ abstract class UserDatabase : RoomDatabase() {
                     UserDatabase::class.java,
                     "Mafia.db"
                 )
+                    .allowMainThreadQueries()//aaaa jak mogłeś to tu zostawić ;/
                     //.createFromAsset("database/init_mafia.db")
                     .build()
 
