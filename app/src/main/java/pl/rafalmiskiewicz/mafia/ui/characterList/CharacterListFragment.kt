@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import pl.rafalmiskiewicz.mafia.databinding.FragmentCharacterBinding
@@ -106,6 +107,12 @@ class CharacterListFragment @Inject constructor() : BaseFragment() {
                 repository.updateUsers(playerList)
             }
         }
+        navToPlayerWitchCharacterList()
+    }
+
+    private fun navToPlayerWitchCharacterList(){
+        val action = CharacterListFragmentDirections.actionCharacterFragmentToPlayerWitchCharacterListFragment()
+        findNavController().navigate(action)
     }
 
     private fun checkIsNumberCharacterCorrect(): Boolean {

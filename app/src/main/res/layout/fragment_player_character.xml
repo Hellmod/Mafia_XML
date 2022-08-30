@@ -1,48 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
             name="viewModel"
-            type="pl.rafalmiskiewicz.mafia.ui.playerList.PlayerListViewModel" />
+            type="pl.rafalmiskiewicz.mafia.ui.playerWitchCharacterList.PlayerWitchCharacterListViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <pl.rafalmiskiewicz.mafia.util.views.InputView
-            android:id="@+id/editText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:content="@={viewModel.playerName}"
-            app:label="Imię: "
-            app:layout_constraintEnd_toStartOf="@+id/button"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="@{() -> viewModel.onAddClicked()}"
-            android:text="Dodaj"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Lista graczy"
+            android:text="Ilość postaci do wybrania: "
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editText" />
+            app:layout_constraintBaseline_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/playerListRecycle"
+            android:id="@+id/playerCharacterListRecycle"
             data="@{viewModel.playerList}"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -50,8 +32,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView"
-            app:onProfileClicked="@{viewModel::onProfileClicked}" />
+            app:layout_constraintTop_toBottomOf="@+id/textView"/>
 
         <Button
             android:id="@+id/button_next"
