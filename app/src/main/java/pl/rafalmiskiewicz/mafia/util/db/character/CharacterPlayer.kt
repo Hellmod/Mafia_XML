@@ -1,4 +1,4 @@
-package pl.rafalmiskiewicz.mafia.util.db
+package pl.rafalmiskiewicz.mafia.util.db.character
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -9,5 +9,6 @@ data class CharacterPlayer(
     val id: Int,
     val name: String,
     var count: Int,
-    val amount: Int
+    val amount: Int,
+    val character: Class<CharacterInt>
 )

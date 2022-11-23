@@ -9,7 +9,7 @@ import pl.rafalmiskiewicz.mafia.ui.base.BaseAdapter
 import pl.rafalmiskiewicz.mafia.ui.base.BaseHolder
 import pl.rafalmiskiewicz.mafia.ui.base.OnRecyclerListener
 import pl.rafalmiskiewicz.mafia.ui.base.ProductCommonClick
-import pl.rafalmiskiewicz.mafia.util.db.CharacterPlayer
+import pl.rafalmiskiewicz.mafia.util.db.character.CharacterPlayer
 
 class CharacterListAdapter : BaseAdapter<CharacterPlayer>(),AutoUpdatableAdapter {
 
