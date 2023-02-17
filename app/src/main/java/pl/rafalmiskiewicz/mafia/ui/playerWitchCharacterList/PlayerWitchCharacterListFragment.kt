@@ -7,15 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import pl.rafalmiskiewicz.mafia.databinding.FragmentPlayerCharacterBinding
-import pl.rafalmiskiewicz.mafia.databinding.FragmentStartBinding
 import pl.rafalmiskiewicz.mafia.extensions.observeEvent
 import pl.rafalmiskiewicz.mafia.ui.base.BaseFragment
-import pl.rafalmiskiewicz.mafia.ui.playerList.PlayerListFragmentDirections
 import pl.rafalmiskiewicz.mafia.util.db.User
 import pl.rafalmiskiewicz.mafia.util.db.UserDatabase
 import pl.rafalmiskiewicz.mafia.util.db.UserRepository
@@ -67,20 +63,9 @@ class PlayerWitchCharacterListFragment @Inject constructor() : BaseFragment() {
 
     private fun handleEvent(event: PlayerWitchCharacterListEvent) {
         when (event) {
-            PlayerWitchCharacterListEvent.NavigateToCharacter -> {
-                val action = PlayerListFragmentDirections.actionStartFragmentToCharacterFragment()
+            PlayerWitchCharacterListEvent.NavigateToGame -> {
+                val action = PlayerWitchCharacterListFragmentDirections.actionPlayerWitchCharacterListFragmentToNightFragment()
                 findNavController().navigate(action)
-            }
-            is PlayerWitchCharacterListEvent.OnAddClicked -> {
-                viewLifecycleOwner.lifecycleScope.launch {
-                    repository.addUser(event.user)
-                }
-
-            }
-            is PlayerWitchCharacterListEvent.OnProfileClicked -> {
-                viewLifecycleOwner.lifecycleScope.launch {
-                    repository.deleteUser(event.id)
-                }
             }
         }
     }

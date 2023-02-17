@@ -1,0 +1,123 @@
+package pl.rafalmiskiewicz.mafia.ui.night
+
+import android.content.Context
+import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import pl.rafalmiskiewicz.mafia.databinding.FragmentNightBinding
+import pl.rafalmiskiewicz.mafia.databinding.FragmentCharacterBinding
+import pl.rafalmiskiewicz.mafia.extensions.observeEvent
+import pl.rafalmiskiewicz.mafia.extensions.toast
+import pl.rafalmiskiewicz.mafia.ui.base.BaseFragment
+import pl.rafalmiskiewicz.mafia.util.db.User
+import pl.rafalmiskiewicz.mafia.util.db.UserDatabase
+import pl.rafalmiskiewicz.mafia.util.db.UserRepository
+import timber.log.Timber
+import javax.inject.Inject
+
+@AndroidEntryPoint
+class NightFragment @Inject constructor() : BaseFragment() {
+
+    private val mViewModel: NightViewModel by viewModels()
+
+    private lateinit var binding: FragmentNightBinding
+
+    lateinit var readAllData: LiveData<List<User>>
+    private lateinit var repository: UserRepository
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding =
+            FragmentNightBinding.inflate(layoutInflater, container, false).apply {
+                lifecycleOwner = viewLifecycleOwner
+                viewModel = mViewModel
+                characterListRecycle.adapter = NightAdapter()
+            }
+
+        initObservers()
+
+        context?.let {
+            initDao(it)
+        }
+        readAllData.observe(
+            viewLifecycleOwner
+        ) { user ->
+            mViewModel.playerList.value = user
+            mViewModel.playersAmount.value = user.size
+            mViewModel.setCharacterLeft(user.size)
+        }
+
+        return binding.root
+    }
+
+    fun initDao(context: Context) {
+        val userDao = UserDatabase.getDatabase(context).userDao()
+        repository = UserRepository(userDao)
+        readAllData = repository.readAllData
+    }
+
+    private fun initObservers() {
+        mViewModel.apply {
+            observeEvent(event, ::handleEvent)
+        }
+    }
+
+    private fun handleEvent(event: NightEvent) {
+        when (event) {
+            NightEvent.OnNextClick -> {
+                onNextClick()
+            }
+        }
+    }
+
+    private fun onNextClick() {
+        if (checkIsNumberCharacterCorrect()) {
+            toast("Nieprawidłowa liczba postaci")
+            return
+        }
+        generateRandomCharacter()
+    }
+
+    private fun generateRandomCharacter() {
+        val characterList = mViewModel.characterPlayerList.value?.toMutableList() ?: mutableListOf()
+        val playerList = mViewModel.playerList.value?.toMutableList() ?: mutableListOf()
+
+        characterList.removeIf { it.count <= 0 }
+        while (characterList.isNotEmpty()) {
+            characterList.shuffle()
+
+            playerList.find { it.character == -1 }?.character = characterList.last().id
+            characterList.last().count--
+            if (characterList.last().count <= 0) {
+                characterList.removeLast()
+            }
+        }
+        Timber.i("RMRM characters: ${playerList}")
+        if (playerList.size > 0 && playerList.find { it.character == -1 } == null) {
+            viewLifecycleOwner.lifecycleScope.launch {
+                repository.updateUsers(playerList)
+            }
+        }
+        navToPlayerWitchCharacterList()
+    }
+
+    private fun navToPlayerWitchCharacterList(){
+        Log.i("RMRM", "RMRM "+"navToPlayerWitchCharacterList() called")
+    }
+
+    private fun checkIsNumberCharacterCorrect(): Boolean {
+        val list = ArrayList(mViewModel.characterPlayerList.value)
+        return (((mViewModel.playersAmount.value?.minus(list.sumOf { it.count })) ?: -1) != 0)
+    }
+}

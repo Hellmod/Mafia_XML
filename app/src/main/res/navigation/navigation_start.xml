@@ -27,5 +27,14 @@
         android:id="@+id/playerWitchCharacterListFragment"
         android:name="pl.rafalmiskiewicz.mafia.ui.playerWitchCharacterList.PlayerWitchCharacterListFragment"
         android:label="PlayerWitchCharacterListFragment"
-        tools:layout="@layout/fragment_player_character"/>
+        tools:layout="@layout/fragment_player_character">
+        <action
+            android:id="@+id/action_playerWitchCharacterListFragment_to_nightFragment"
+            app:destination="@id/nightFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/nightFragment"
+        android:name="pl.rafalmiskiewicz.mafia.ui.night.NightFragment"
+        android:label="NightFragment"
+        tools:layout="@layout/fragment_night"/>
 </navigation>
