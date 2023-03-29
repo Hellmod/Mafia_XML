@@ -9,13 +9,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import pl.rafalmiskiewicz.mafia.databinding.FragmentNightBinding
-import pl.rafalmiskiewicz.mafia.databinding.FragmentCharacterBinding
 import pl.rafalmiskiewicz.mafia.extensions.observeEvent
-import pl.rafalmiskiewicz.mafia.extensions.toast
 import pl.rafalmiskiewicz.mafia.ui.base.BaseFragment
 import pl.rafalmiskiewicz.mafia.util.db.User
 import pl.rafalmiskiewicz.mafia.util.db.UserDatabase
@@ -42,13 +39,12 @@ class NightFragment @Inject constructor() : BaseFragment() {
             FragmentNightBinding.inflate(layoutInflater, container, false).apply {
                 lifecycleOwner = viewLifecycleOwner
                 viewModel = mViewModel
-                characterListRecycle.adapter = NightAdapter()
             }
 
         initObservers()
 
         context?.let {
-            initDao(it)
+            initDao()
         }
         readAllData.observe(
             viewLifecycleOwner
@@ -61,9 +57,8 @@ class NightFragment @Inject constructor() : BaseFragment() {
         return binding.root
     }
 
-    fun initDao(context: Context) {
-        val userDao = UserDatabase.getDatabase(context).userDao()
-        repository = UserRepository(userDao)
+    fun initDao() {
+        repository = UserRepository(mViewModel.initDatabase)
         readAllData = repository.readAllData
     }
 
@@ -82,11 +77,9 @@ class NightFragment @Inject constructor() : BaseFragment() {
     }
 
     private fun onNextClick() {
-        if (checkIsNumberCharacterCorrect()) {
-            toast("Nieprawidłowa liczba postaci")
-            return
+        mViewModel.playerList.value?.let {
+            Log.i("RMRM", "RMRM "+"onResume() called with: it = $it")
         }
-        generateRandomCharacter()
     }
 
     private fun generateRandomCharacter() {
@@ -112,8 +105,8 @@ class NightFragment @Inject constructor() : BaseFragment() {
         navToPlayerWitchCharacterList()
     }
 
-    private fun navToPlayerWitchCharacterList(){
-        Log.i("RMRM", "RMRM "+"navToPlayerWitchCharacterList() called")
+    private fun navToPlayerWitchCharacterList() {
+        Log.i("RMRM", "RMRM " + "navToPlayerWitchCharacterList() called")
     }
 
     private fun checkIsNumberCharacterCorrect(): Boolean {
