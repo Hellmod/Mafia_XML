@@ -27,14 +27,14 @@ class CharacterListViewModel @Inject constructor() : BaseViewModel<CharacterList
             CharacterPlayer(
                 id = 0,
                 name = "Marynarz",
-                count = 0,
+                count = 1,
                 amount = 4,
                 character = Sailor().javaClass
             ),
             CharacterPlayer(
                 id = 1,
                 name = "Pirat",
-                count = 0,
+                count = 1,
                 amount = 4,
                 character = Pirates().javaClass
             ),
