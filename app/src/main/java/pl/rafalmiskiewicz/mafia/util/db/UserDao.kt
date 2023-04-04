@@ -18,4 +18,7 @@ interface UserDao {
     @Update
     fun updateSong(songs: List<User>): Int
 
+    @Query("UPDATE User SET isPlayerDead = :isDead WHERE id = :userId")
+    suspend fun updateIsPlayerDead(userId: Int, isDead: Boolean)
+
 }

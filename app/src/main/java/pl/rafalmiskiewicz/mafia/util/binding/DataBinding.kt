@@ -4,6 +4,7 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import pl.rafalmiskiewicz.mafia.ui.base.BaseAdapter
 import pl.rafalmiskiewicz.mafia.ui.base.OnRecyclerListener
+import pl.rafalmiskiewicz.mafia.ui.night.NightAdapter
 import pl.rafalmiskiewicz.mafia.ui.playerList.PlayerListAdapter
 
 @BindingAdapter("data")
@@ -22,6 +23,11 @@ fun setOnPlayerClickListeners(
 ) {
     if (recyclerView.adapter is PlayerListAdapter) {
         (recyclerView.adapter as PlayerListAdapter).setonPlayerClickListener(
+            onPlayerClicked
+        )
+    }
+    if (recyclerView.adapter is NightAdapter) {
+        (recyclerView.adapter as NightAdapter).setonPlayerClickListener(
             onPlayerClicked
         )
     }

@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import pl.rafalmiskiewicz.mafia.databinding.FragmentNightBinding
 import pl.rafalmiskiewicz.mafia.extensions.observeEvent
 import pl.rafalmiskiewicz.mafia.ui.base.BaseFragment
@@ -40,10 +42,8 @@ class NightFragment @Inject constructor() : BaseFragment() {
             }
 
         initObservers()
+        initDao()
 
-        context?.let {
-            initDao()
-        }
         readAllData.observe(
             viewLifecycleOwner
         ) { user ->
@@ -69,12 +69,21 @@ class NightFragment @Inject constructor() : BaseFragment() {
             NightEvent.OnNextClick -> {
                 onNextClick()
             }
+            is NightEvent.KillPlayer -> {
+                killPlayer(event.userId)
+            }
         }
     }
 
     private fun onNextClick() {
         mViewModel.playerList.value?.let {
-            Log.i("RMRM", "RMRM "+"onResume() called with: it = $it")
+            Log.i("RMRM", "RMRM " + "onResume() called with: it = $it")
+        }
+    }
+
+    private fun killPlayer(userId: Int) {
+        lifecycleScope.launch {
+            mViewModel.initDatabase.updateIsPlayerDead(userId, true)
         }
     }
 
