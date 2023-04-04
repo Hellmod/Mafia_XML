@@ -36,7 +36,7 @@ class NightFragment @Inject constructor() : BaseFragment() {
             FragmentNightBinding.inflate(layoutInflater, container, false).apply {
                 lifecycleOwner = viewLifecycleOwner
                 viewModel = mViewModel
-                playerListRecycle.adapter = NightAdapter()
+                playerCharacterListRecycle.adapter = NightAdapter()
             }
 
         initObservers()
@@ -47,15 +47,7 @@ class NightFragment @Inject constructor() : BaseFragment() {
         readAllData.observe(
             viewLifecycleOwner
         ) { user ->
-            mViewModel.characterPlayerList.value = user.map {
-                CharacterPlayer(
-                    it.id,
-                    it.name,
-                    count = 1,
-                    amount = 1,
-                    character = Pirates().javaClass,
-                )
-            }
+            mViewModel.playerList.value = user
         }
 
         return binding.root
@@ -81,7 +73,7 @@ class NightFragment @Inject constructor() : BaseFragment() {
     }
 
     private fun onNextClick() {
-        mViewModel.characterPlayerList.value?.let {
+        mViewModel.playerList.value?.let {
             Log.i("RMRM", "RMRM "+"onResume() called with: it = $it")
         }
     }
