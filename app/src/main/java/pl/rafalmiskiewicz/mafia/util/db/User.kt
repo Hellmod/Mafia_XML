@@ -8,5 +8,6 @@ data class User(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val name: String,
-    var character: Int = -1
+    var character: Int = -1,
+    var isPlayerDead: Boolean = false,
 )

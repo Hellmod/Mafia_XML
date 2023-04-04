@@ -2,7 +2,7 @@ package pl.rafalmiskiewicz.mafia.ui.night
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import pl.rafalmiskiewicz.mafia.databinding.ItemPlayerCharacterBinding
+import pl.rafalmiskiewicz.mafia.databinding.ItemPlayerDetailsBinding
 import pl.rafalmiskiewicz.mafia.extensions.getList
 import pl.rafalmiskiewicz.mafia.ui.base.BaseAdapter
 import pl.rafalmiskiewicz.mafia.ui.base.BaseHolder
@@ -19,7 +19,7 @@ class NightAdapter : BaseAdapter<User>() {
         viewType: Int
     ): BaseHolder<User> {
         return DoctorsListHolder(
-            ItemPlayerCharacterBinding.inflate(
+            ItemPlayerDetailsBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -39,7 +39,7 @@ class NightAdapter : BaseAdapter<User>() {
         this.onPlayerClickListener = listener
     }
 
-    class DoctorsListHolder(private val itemBinding: ItemPlayerCharacterBinding) :
+    class DoctorsListHolder(private val itemBinding: ItemPlayerDetailsBinding) :
         BaseHolder<User>(itemBinding.root), PlayerListBinder {
 
         override fun bind(item: User, listener: OnRecyclerListener?) = Unit
@@ -50,10 +50,11 @@ class NightAdapter : BaseAdapter<User>() {
             playerListener: OnRecyclerListener?
         ) {
             itemBinding.apply {
-                player.playerName.text = item.name
-                player.playerName.setOnClickListener { playerListener?.onClick(ProductCommonClick.ItemClick, item.id) }
-                player.playerId.text = item.id.toString()
-                characterName.text = getList()[item.character].name
+                playerCharacter.player.playerName.text = item.name
+                playerCharacter.player.playerName.setOnClickListener { playerListener?.onClick(ProductCommonClick.ItemClick, item.id) }
+                playerCharacter.player.playerId.text = item.id.toString()
+                playerCharacter.characterName.text = getList()[item.character].name
+                characterAlive.text = if (item.isPlayerDead) "Dead" else "Alive"
             }
         }
     }
