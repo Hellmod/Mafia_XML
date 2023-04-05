@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import pl.rafalmiskiewicz.mafia.databinding.FragmentNightBinding
+import pl.rafalmiskiewicz.mafia.extensions.getList
 import pl.rafalmiskiewicz.mafia.extensions.observeEvent
 import pl.rafalmiskiewicz.mafia.ui.base.BaseFragment
 import pl.rafalmiskiewicz.mafia.util.db.User
@@ -73,8 +74,15 @@ class NightFragment @Inject constructor() : BaseFragment() {
                 nTestsClick()
             }
             is NightEvent.KillPlayer -> {
-                killPlayer(event.userId)
+                makeSpecialActionCharacter(event.userId, event.userId)
+                //killPlayer(event.userId)
             }
+        }
+    }
+
+    private fun makeSpecialActionCharacter(userId: Int, chosenId: Int) {
+        mViewModel.playerList.value?.find { it.id == userId }?.let {
+            getList().find { it.character == it.character }?.character?.makeSpecificAction(chosenId - 1)
         }
     }
 

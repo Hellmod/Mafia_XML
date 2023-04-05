@@ -1,5 +1,6 @@
 package pl.rafalmiskiewicz.mafia.util.db.character
 
+import android.graphics.drawable.Animatable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -10,5 +11,5 @@ data class CharacterPlayer(
     val name: String,
     var count: Int,
     val amount: Int,
-    val character: Class<CharacterInt>
+    val character: CharacterInt
 )

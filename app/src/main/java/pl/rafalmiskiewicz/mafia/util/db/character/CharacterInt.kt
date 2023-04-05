@@ -1,3 +1,5 @@
 package pl.rafalmiskiewicz.mafia.util.db.character
 
-interface CharacterInt
+abstract class CharacterInt {
+    abstract fun makeSpecificAction(playerId: Int)
+}

@@ -11,14 +11,14 @@ fun getList(): List<CharacterPlayer> {
             name = "Marynarz",
             count = 2,
             amount = 4,
-            character = Sailor().javaClass
+            character = Sailor()
         ),
         CharacterPlayer(
             id = 1,
             name = "Pirat",
             count = 1,
             amount = 4,
-            character = Pirates().javaClass
+            character = Pirates()
         ),
     )
 }
