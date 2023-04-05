@@ -25,7 +25,8 @@ class NightViewModel @Inject constructor(
         sendEvent(NightEvent.OnNextClick)
     }
 
-    fun onTetsClicked() {
+    fun onTestsClicked() {
+        sendEvent(NightEvent.OnTestsClick)
         Log.i("RMRM", "RMRM " + "onTetsClicked() called playerList = ${playerList.value}")
     }
 }

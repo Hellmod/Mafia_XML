@@ -3,6 +3,7 @@ package pl.rafalmiskiewicz.mafia.ui.characterList
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
+import pl.rafalmiskiewicz.mafia.extensions.getList
 import pl.rafalmiskiewicz.mafia.ui.base.BaseViewModel
 import pl.rafalmiskiewicz.mafia.ui.base.ClickType
 import pl.rafalmiskiewicz.mafia.ui.base.ProductCommonClick
@@ -23,22 +24,7 @@ class CharacterListViewModel @Inject constructor() : BaseViewModel<CharacterList
     val characterLeft: LiveData<String> = _characterLeft
 
     init {
-        characterPlayerList.value = listOf(
-            CharacterPlayer(
-                id = 0,
-                name = "Marynarz",
-                count = 1,
-                amount = 4,
-                character = Sailor().javaClass
-            ),
-            CharacterPlayer(
-                id = 1,
-                name = "Pirat",
-                count = 1,
-                amount = 4,
-                character = Pirates().javaClass
-            ),
-        )
+        characterPlayerList.value = getList()
         calculateCharacterToChoose()
     }
 

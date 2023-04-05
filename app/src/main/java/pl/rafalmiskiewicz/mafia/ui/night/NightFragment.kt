@@ -69,6 +69,9 @@ class NightFragment @Inject constructor() : BaseFragment() {
             NightEvent.OnNextClick -> {
                 onNextClick()
             }
+            NightEvent.OnTestsClick -> {
+                nTestsClick()
+            }
             is NightEvent.KillPlayer -> {
                 killPlayer(event.userId)
             }
@@ -78,6 +81,14 @@ class NightFragment @Inject constructor() : BaseFragment() {
     private fun onNextClick() {
         mViewModel.playerList.value?.let {
             Log.i("RMRM", "RMRM " + "onResume() called with: it = $it")
+        }
+    }
+
+    private fun nTestsClick() {
+        lifecycleScope.launch {
+            mViewModel.playerList.value?.forEach {
+                mViewModel.initDatabase.updateIsPlayerDead(it.id, false)
+            }
         }
     }
 
