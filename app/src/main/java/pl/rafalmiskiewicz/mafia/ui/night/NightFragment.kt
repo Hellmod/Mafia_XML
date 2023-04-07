@@ -15,12 +15,11 @@ import pl.rafalmiskiewicz.mafia.extensions.observeEvent
 import pl.rafalmiskiewicz.mafia.ui.base.BaseFragment
 import pl.rafalmiskiewicz.mafia.util.db.User
 import pl.rafalmiskiewicz.mafia.util.db.UserRepository
-import pl.rafalmiskiewicz.mafia.util.db.character.CharacterPlayer
-import pl.rafalmiskiewicz.mafia.util.db.character.Pirates
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class NightFragment @Inject constructor() : BaseFragment() {
+class NightFragment @Inject constructor(
+) : BaseFragment() {
 
     private val mViewModel: NightViewModel by viewModels()
 
@@ -38,7 +37,7 @@ class NightFragment @Inject constructor() : BaseFragment() {
             FragmentNightBinding.inflate(layoutInflater, container, false).apply {
                 lifecycleOwner = viewLifecycleOwner
                 viewModel = mViewModel
-                playerCharacterListRecycle.adapter = NightAdapter()
+                playerCharacterListRecycle.adapter = NightAdapter(mViewModel.characterMap)
             }
 
         initObservers()
@@ -73,8 +72,15 @@ class NightFragment @Inject constructor() : BaseFragment() {
                 nTestsClick()
             }
             is NightEvent.KillPlayer -> {
-                killPlayer(event.userId)
+                makeSpecialActionCharacter(event.userId, event.userId)
+                //killPlayer(event.userId)
             }
+        }
+    }
+
+    private fun makeSpecialActionCharacter(userId: Int, chosenId: Int) {
+        mViewModel.playerList.value?.find { it.id == userId }?.let {
+            mViewModel.characterMap.get(it.character)?.makeSpecificAction(chosenId - 1)
         }
     }
 

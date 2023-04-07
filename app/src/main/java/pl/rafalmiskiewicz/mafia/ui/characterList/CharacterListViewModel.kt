@@ -3,18 +3,18 @@ package pl.rafalmiskiewicz.mafia.ui.characterList
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
-import pl.rafalmiskiewicz.mafia.extensions.getList
 import pl.rafalmiskiewicz.mafia.ui.base.BaseViewModel
 import pl.rafalmiskiewicz.mafia.ui.base.ClickType
 import pl.rafalmiskiewicz.mafia.ui.base.ProductCommonClick
-import pl.rafalmiskiewicz.mafia.util.db.character.CharacterPlayer
 import pl.rafalmiskiewicz.mafia.util.db.User
-import pl.rafalmiskiewicz.mafia.util.db.character.Pirates
-import pl.rafalmiskiewicz.mafia.util.db.character.Sailor
+import pl.rafalmiskiewicz.mafia.util.db.character.CharacterInt
+import pl.rafalmiskiewicz.mafia.util.db.character.CharacterPlayer
 import javax.inject.Inject
 
 @HiltViewModel
-class CharacterListViewModel @Inject constructor() : BaseViewModel<CharacterListEvent>() {
+class CharacterListViewModel @Inject constructor(
+    val characterMap: HashMap<Int, CharacterInt>
+) : BaseViewModel<CharacterListEvent>() {
 
     val characterPlayerList = MutableLiveData<List<CharacterPlayer>>()
 
@@ -24,7 +24,20 @@ class CharacterListViewModel @Inject constructor() : BaseViewModel<CharacterList
     val characterLeft: LiveData<String> = _characterLeft
 
     init {
-        characterPlayerList.value = getList()
+        characterPlayerList.value = listOf(
+            CharacterPlayer(
+                id = 1,
+                name = "Marynarz",
+                count = 1,
+                amount = 4,
+            ),
+            CharacterPlayer(
+                id = 2,
+                name = "Pirat",
+                count = 1,
+                amount = 4,
+            ),
+        )
         calculateCharacterToChoose()
     }
 

@@ -7,11 +7,13 @@ import pl.rafalmiskiewicz.mafia.ui.base.BaseViewModel
 import pl.rafalmiskiewicz.mafia.ui.base.ClickType
 import pl.rafalmiskiewicz.mafia.util.db.User
 import pl.rafalmiskiewicz.mafia.util.db.UserDao
+import pl.rafalmiskiewicz.mafia.util.db.character.CharacterInt
 import javax.inject.Inject
 
 @HiltViewModel
 class NightViewModel @Inject constructor(
-    val initDatabase: UserDao
+    val initDatabase: UserDao,
+    val characterMap: HashMap<Int, CharacterInt>
 ) : BaseViewModel<NightEvent>() {
 
     val playerList = MutableLiveData<List<User>>()

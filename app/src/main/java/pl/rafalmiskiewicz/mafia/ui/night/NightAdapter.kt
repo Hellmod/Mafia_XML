@@ -3,14 +3,14 @@ package pl.rafalmiskiewicz.mafia.ui.night
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import pl.rafalmiskiewicz.mafia.databinding.ItemPlayerDetailsBinding
-import pl.rafalmiskiewicz.mafia.extensions.getList
 import pl.rafalmiskiewicz.mafia.ui.base.BaseAdapter
 import pl.rafalmiskiewicz.mafia.ui.base.BaseHolder
 import pl.rafalmiskiewicz.mafia.ui.base.OnRecyclerListener
 import pl.rafalmiskiewicz.mafia.ui.base.ProductCommonClick
 import pl.rafalmiskiewicz.mafia.util.db.User
+import pl.rafalmiskiewicz.mafia.util.db.character.CharacterInt
 
-class NightAdapter : BaseAdapter<User>() {
+class NightAdapter(val characterMap: HashMap<Int, CharacterInt>) : BaseAdapter<User>() {
 
     private var onPlayerClickListener: OnRecyclerListener? = null
 
@@ -23,7 +23,7 @@ class NightAdapter : BaseAdapter<User>() {
                 LayoutInflater.from(parent.context),
                 parent,
                 false
-            )
+            ), characterMap
         )
     }
 
@@ -39,7 +39,7 @@ class NightAdapter : BaseAdapter<User>() {
         this.onPlayerClickListener = listener
     }
 
-    class DoctorsListHolder(private val itemBinding: ItemPlayerDetailsBinding) :
+    class DoctorsListHolder(private val itemBinding: ItemPlayerDetailsBinding, val characterMap: HashMap<Int, CharacterInt>) :
         BaseHolder<User>(itemBinding.root), PlayerListBinder {
 
         override fun bind(item: User, listener: OnRecyclerListener?) = Unit
@@ -53,7 +53,7 @@ class NightAdapter : BaseAdapter<User>() {
                 playerCharacter.player.playerName.text = item.name
                 playerCharacter.player.playerName.setOnClickListener { playerListener?.onClick(ProductCommonClick.ItemClick, item.id) }
                 playerCharacter.player.playerId.text = item.id.toString()
-                playerCharacter.characterName.text = getList()[item.character].name
+                playerCharacter.characterName.text = characterMap.get(item.character)?.name
                 characterAlive.text = if (item.isPlayerDead) "Dead" else "Alive"
             }
         }

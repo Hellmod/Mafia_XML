@@ -36,7 +36,7 @@ class PlayerWitchCharacterListFragment @Inject constructor() : BaseFragment() {
             FragmentPlayerCharacterBinding.inflate(layoutInflater, container, false).apply {
                 lifecycleOwner = viewLifecycleOwner
                 viewModel = mViewModel
-                playerCharacterListRecycle.adapter = PlayerWitchCharacterListAdapter()
+                playerCharacterListRecycle.adapter = PlayerWitchCharacterListAdapter(mViewModel.characterMap)
             }
 
         initObservers()
