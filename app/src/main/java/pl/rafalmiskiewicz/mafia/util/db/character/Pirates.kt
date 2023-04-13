@@ -9,6 +9,8 @@ class Pirates(
 ) : CharacterInt() {
 
     override val name = "Pirat"
+    override var wakeInNight: Boolean = true
+    override var prority: Float = 1f
     override fun makeSpecificAction(playerId: Int) {
         killPlayer(playerId)
     }

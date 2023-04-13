@@ -7,7 +7,11 @@ import pl.rafalmiskiewicz.mafia.util.db.UserDao
 class Sailor(
     private val initDatabase: UserDao
 ) : CharacterInt() {
+
     override val name = "Marynarz"
+    override var wakeInNight: Boolean = false
+    override var prority: Float = 1f
+
     override fun makeSpecificAction(playerId: Int) {
         killPlayer(playerId)
     }

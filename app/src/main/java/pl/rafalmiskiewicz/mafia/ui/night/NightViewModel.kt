@@ -16,7 +16,27 @@ class NightViewModel @Inject constructor(
     val characterMap: HashMap<Int, CharacterInt>
 ) : BaseViewModel<NightEvent>() {
 
+    var charactersListInPlay = listOf<Int>()
+    val characterPointerTurn = 0
+    val isNight = true
     val playerList = MutableLiveData<List<User>>()
+
+    init {
+        initCharactersListInPlay()
+    }
+
+    fun initCharactersListInPlay() {
+        playerList.value?.let {
+            it.map {
+                val characterId = it.character
+                val prority = characterMap.get(it.character)?.prority
+                Pair(characterId, prority)
+            }.sortedBy { it.second }
+                .map { it.first }
+                .distinct()
+        }
+
+    }
 
     fun onProfileClicked(type: ClickType, id: Int) {
         sendEvent(NightEvent.KillPlayer(id))
