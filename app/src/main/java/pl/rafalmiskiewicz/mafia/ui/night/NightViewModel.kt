@@ -1,84 +1,45 @@
 package pl.rafalmiskiewicz.mafia.ui.night
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import pl.rafalmiskiewicz.mafia.ui.base.BaseViewModel
 import pl.rafalmiskiewicz.mafia.ui.base.ClickType
-import pl.rafalmiskiewicz.mafia.ui.base.ProductCommonClick
 import pl.rafalmiskiewicz.mafia.util.db.User
 import pl.rafalmiskiewicz.mafia.util.db.UserDao
-import pl.rafalmiskiewicz.mafia.util.db.character.CharacterPlayer
-import pl.rafalmiskiewicz.mafia.util.db.character.Pirates
-import pl.rafalmiskiewicz.mafia.util.db.character.Sailor
+import pl.rafalmiskiewicz.mafia.util.db.character.CharacterInt
 import javax.inject.Inject
 
 @HiltViewModel
 class NightViewModel @Inject constructor(
-    val initDatabase: UserDao
+    val initDatabase: UserDao,
+    val characterMap: HashMap<Int, CharacterInt>
 ) : BaseViewModel<NightEvent>() {
 
-    val characterPlayerList = MutableLiveData<List<CharacterPlayer>>()
-
+    var charactersListInPlay = listOf<Int>()
+    val characterPointerTurn = 0
+    val isNight = true
     val playerList = MutableLiveData<List<User>>()
-    val playersAmount = MutableLiveData(0)
-    private val _characterLeft = MutableLiveData<String>("0")
-    val characterLeft: LiveData<String> = _characterLeft
 
     init {
-        characterPlayerList.value = listOf(
-            CharacterPlayer(
-                id = 0,
-                name = "Marynarz",
-                count = 0,
-                amount = 4,
-                character = Sailor().javaClass
-            ),
-            CharacterPlayer(
-                id = 1,
-                name = "Pirat",
-                count = 0,
-                amount = 4,
-                character = Pirates().javaClass
-            ),
-        )
-        calculateCharacterToChoose()
+        initCharactersListInPlay()
     }
 
-    fun itemClick(type: ClickType, position: Int) {
-        when (type) {
-            ProductCommonClick.PlusAmount -> increaseRemove(position, 1)
-            ProductCommonClick.MinusAmount -> increaseRemove(position, -1)
-        }
-    }
-
-    private fun increaseRemove(position: Int, diff: Int) {
-        val list = ArrayList(characterPlayerList.value)
-        val amountToDrop = list[position].count + diff
-
-        if (diff > 0 && amountToDrop > list[position].amount) {
-            return
+    fun initCharactersListInPlay() {
+        playerList.value?.let {
+            it.map {
+                val characterId = it.character
+                val prority = characterMap.get(it.character)?.prority
+                Pair(characterId, prority)
+            }.sortedBy { it.second }
+                .map { it.first }
+                .distinct()
         }
 
-        list[position] = list[position].copy(
-            count = amountToDrop
-        )
-        updateList(list)
-        calculateCharacterToChoose()
     }
 
-    private fun updateList(list: List<CharacterPlayer>?) {
-        characterPlayerList.value = ArrayList(list)
-    }
-
-    fun setCharacterLeft(amaount: Int) {
-        _characterLeft.value = amaount.toString()
-    }
-
-    private fun calculateCharacterToChoose() {
-        val list = ArrayList(characterPlayerList.value)
-        _characterLeft.value = (playersAmount.value?.minus(list.sumOf { it.count })).toString()
+    fun onProfileClicked(type: ClickType, id: Int) {
+        sendEvent(NightEvent.KillPlayer(id))
     }
 
     fun onNextClicked() {
@@ -86,7 +47,8 @@ class NightViewModel @Inject constructor(
         sendEvent(NightEvent.OnNextClick)
     }
 
-    fun onTetsClicked() {
-        Log.i("RMRM", "RMRM " + "onNextClicked() called")
+    fun onTestsClicked() {
+        sendEvent(NightEvent.OnTestsClick)
+        Log.i("RMRM", "RMRM " + "onTetsClicked() called playerList = ${playerList.value}")
     }
 }

@@ -1,6 +1,5 @@
 package pl.rafalmiskiewicz.mafia.ui.night
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,13 +14,12 @@ import pl.rafalmiskiewicz.mafia.databinding.FragmentNightBinding
 import pl.rafalmiskiewicz.mafia.extensions.observeEvent
 import pl.rafalmiskiewicz.mafia.ui.base.BaseFragment
 import pl.rafalmiskiewicz.mafia.util.db.User
-import pl.rafalmiskiewicz.mafia.util.db.UserDatabase
 import pl.rafalmiskiewicz.mafia.util.db.UserRepository
-import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class NightFragment @Inject constructor() : BaseFragment() {
+class NightFragment @Inject constructor(
+) : BaseFragment() {
 
     private val mViewModel: NightViewModel by viewModels()
 
@@ -39,19 +37,16 @@ class NightFragment @Inject constructor() : BaseFragment() {
             FragmentNightBinding.inflate(layoutInflater, container, false).apply {
                 lifecycleOwner = viewLifecycleOwner
                 viewModel = mViewModel
+                playerCharacterListRecycle.adapter = NightAdapter(mViewModel.characterMap)
             }
 
         initObservers()
+        initDao()
 
-        context?.let {
-            initDao()
-        }
         readAllData.observe(
             viewLifecycleOwner
         ) { user ->
             mViewModel.playerList.value = user
-            mViewModel.playersAmount.value = user.size
-            mViewModel.setCharacterLeft(user.size)
         }
 
         return binding.root
@@ -73,44 +68,40 @@ class NightFragment @Inject constructor() : BaseFragment() {
             NightEvent.OnNextClick -> {
                 onNextClick()
             }
+            NightEvent.OnTestsClick -> {
+                nTestsClick()
+            }
+            is NightEvent.KillPlayer -> {
+                makeSpecialActionCharacter(event.userId, event.userId)
+                //killPlayer(event.userId)
+            }
+        }
+    }
+
+    private fun makeSpecialActionCharacter(userId: Int, chosenId: Int) {
+        mViewModel.playerList.value?.find { it.id == userId }?.let {
+            mViewModel.characterMap.get(it.character)?.makeSpecificAction(chosenId - 1)
         }
     }
 
     private fun onNextClick() {
         mViewModel.playerList.value?.let {
-            Log.i("RMRM", "RMRM "+"onResume() called with: it = $it")
+            Log.i("RMRM", "RMRM " + "onResume() called with: it = $it")
         }
     }
 
-    private fun generateRandomCharacter() {
-        val characterList = mViewModel.characterPlayerList.value?.toMutableList() ?: mutableListOf()
-        val playerList = mViewModel.playerList.value?.toMutableList() ?: mutableListOf()
-
-        characterList.removeIf { it.count <= 0 }
-        while (characterList.isNotEmpty()) {
-            characterList.shuffle()
-
-            playerList.find { it.character == -1 }?.character = characterList.last().id
-            characterList.last().count--
-            if (characterList.last().count <= 0) {
-                characterList.removeLast()
+    private fun nTestsClick() {
+        lifecycleScope.launch {
+            mViewModel.playerList.value?.forEach {
+                mViewModel.initDatabase.updateIsPlayerDead(it.id, false)
             }
         }
-        Timber.i("RMRM characters: ${playerList}")
-        if (playerList.size > 0 && playerList.find { it.character == -1 } == null) {
-            viewLifecycleOwner.lifecycleScope.launch {
-                repository.updateUsers(playerList)
-            }
+    }
+
+    private fun killPlayer(userId: Int) {
+        lifecycleScope.launch {
+            mViewModel.initDatabase.updateIsPlayerDead(userId, true)
         }
-        navToPlayerWitchCharacterList()
     }
 
-    private fun navToPlayerWitchCharacterList() {
-        Log.i("RMRM", "RMRM " + "navToPlayerWitchCharacterList() called")
-    }
-
-    private fun checkIsNumberCharacterCorrect(): Boolean {
-        val list = ArrayList(mViewModel.characterPlayerList.value)
-        return (((mViewModel.playersAmount.value?.minus(list.sumOf { it.count })) ?: -1) != 0)
-    }
 }
