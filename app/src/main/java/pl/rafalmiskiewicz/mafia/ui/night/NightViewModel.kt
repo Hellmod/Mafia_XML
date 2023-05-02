@@ -2,6 +2,7 @@ package pl.rafalmiskiewicz.mafia.ui.night
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import pl.rafalmiskiewicz.mafia.ui.base.BaseViewModel
 import pl.rafalmiskiewicz.mafia.ui.base.ClickType
@@ -21,34 +22,16 @@ class NightViewModel @Inject constructor(
     val isNight = true
     val playerList = MutableLiveData<List<User>>()
 
-    init {
-        initCharactersListInPlay()
-    }
-
-    fun initCharactersListInPlay() {
-        playerList.value?.let {
-            it.map {
-                val characterId = it.character
-                val prority = characterMap.get(it.character)?.prority
-                Pair(characterId, prority)
-            }.sortedBy { it.second }
-                .map { it.first }
-                .distinct()
-        }
-
-    }
-
     fun onProfileClicked(type: ClickType, id: Int) {
         sendEvent(NightEvent.KillPlayer(id))
     }
 
     fun onNextClicked() {
-        Log.i("RMRM", "RMRM " + "onNextClicked() called")
         sendEvent(NightEvent.OnNextClick)
     }
 
     fun onTestsClicked() {
+        Log.i("RMRM", "RMRM "+"onTestsClicked() called charactersListInPlay: $charactersListInPlay")
         sendEvent(NightEvent.OnTestsClick)
-        Log.i("RMRM", "RMRM " + "onTetsClicked() called playerList = ${playerList.value}")
     }
 }

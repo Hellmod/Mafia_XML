@@ -40,6 +40,7 @@ class NightFragment @Inject constructor(
                 playerCharacterListRecycle.adapter = NightAdapter(mViewModel.characterMap)
             }
 
+        initCharactersListInPlay()
         initObservers()
         initDao()
 
@@ -63,14 +64,29 @@ class NightFragment @Inject constructor(
         }
     }
 
+    fun initCharactersListInPlay() {
+        mViewModel.playerList.observe(viewLifecycleOwner) {
+            mViewModel.charactersListInPlay = it.map {user ->
+                Log.i("RMRM", "RMRM "+"initCharactersListInPlay() called with: user = $user")
+                val characterId = user.character
+                val priority = mViewModel.characterMap.get(user.character)?.prority
+                Pair(characterId, priority)
+            }.sortedBy { it.second }
+                .map { it.first }
+                .distinct()
+        }
+    }
+
     private fun handleEvent(event: NightEvent) {
         when (event) {
             NightEvent.OnNextClick -> {
                 onNextClick()
             }
+
             NightEvent.OnTestsClick -> {
                 nTestsClick()
             }
+
             is NightEvent.KillPlayer -> {
                 makeSpecialActionCharacter(event.userId, event.userId)
                 //killPlayer(event.userId)
@@ -85,17 +101,11 @@ class NightFragment @Inject constructor(
     }
 
     private fun onNextClick() {
-        mViewModel.playerList.value?.let {
-            Log.i("RMRM", "RMRM " + "onResume() called with: it = $it")
-        }
+
     }
 
     private fun nTestsClick() {
-        lifecycleScope.launch {
-            mViewModel.playerList.value?.forEach {
-                mViewModel.initDatabase.updateIsPlayerDead(it.id, false)
-            }
-        }
+
     }
 
     private fun killPlayer(userId: Int) {

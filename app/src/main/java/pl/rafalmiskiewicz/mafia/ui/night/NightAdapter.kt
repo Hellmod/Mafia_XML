@@ -3,6 +3,7 @@ package pl.rafalmiskiewicz.mafia.ui.night
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import pl.rafalmiskiewicz.mafia.databinding.ItemPlayerDetailsBinding
+import pl.rafalmiskiewicz.mafia.databinding.ItemPlayerDetailsCheckBinding
 import pl.rafalmiskiewicz.mafia.ui.base.BaseAdapter
 import pl.rafalmiskiewicz.mafia.ui.base.BaseHolder
 import pl.rafalmiskiewicz.mafia.ui.base.OnRecyclerListener
@@ -19,7 +20,7 @@ class NightAdapter(val characterMap: HashMap<Int, CharacterInt>) : BaseAdapter<U
         viewType: Int
     ): BaseHolder<User> {
         return DoctorsListHolder(
-            ItemPlayerDetailsBinding.inflate(
+            ItemPlayerDetailsCheckBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -39,7 +40,7 @@ class NightAdapter(val characterMap: HashMap<Int, CharacterInt>) : BaseAdapter<U
         this.onPlayerClickListener = listener
     }
 
-    class DoctorsListHolder(private val itemBinding: ItemPlayerDetailsBinding, val characterMap: HashMap<Int, CharacterInt>) :
+    class DoctorsListHolder(private val itemBinding: ItemPlayerDetailsCheckBinding, val characterMap: HashMap<Int, CharacterInt>) :
         BaseHolder<User>(itemBinding.root), PlayerListBinder {
 
         override fun bind(item: User, listener: OnRecyclerListener?) = Unit
@@ -50,11 +51,16 @@ class NightAdapter(val characterMap: HashMap<Int, CharacterInt>) : BaseAdapter<U
             playerListener: OnRecyclerListener?
         ) {
             itemBinding.apply {
-                playerCharacter.player.playerName.text = item.name
-                playerCharacter.player.playerName.setOnClickListener { playerListener?.onClick(ProductCommonClick.ItemClick, item.id) }
-                playerCharacter.player.playerId.text = item.id.toString()
-                playerCharacter.characterName.text = characterMap.get(item.character)?.name
-                characterAlive.text = if (item.isPlayerDead) "Dead" else "Alive"
+                playerCharacterDetails.playerCharacter.player.playerName.text = item.name
+                playerCharacterDetails.playerCharacter.player.playerName.setOnClickListener {
+                    playerListener?.onClick(
+                        ProductCommonClick.ItemClick,
+                        item.id
+                    )
+                }
+                playerCharacterDetails.playerCharacter.player.playerId.text = item.id.toString()
+                playerCharacterDetails.playerCharacter.characterName.text = characterMap.get(item.character)?.name
+                playerCharacterDetails.characterAlive.text = if (item.isPlayerDead) "Dead" else "Alive"
             }
         }
     }
