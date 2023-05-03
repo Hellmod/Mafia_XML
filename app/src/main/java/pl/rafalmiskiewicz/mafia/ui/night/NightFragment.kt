@@ -15,13 +15,15 @@ import pl.rafalmiskiewicz.mafia.extensions.observeEvent
 import pl.rafalmiskiewicz.mafia.ui.base.BaseFragment
 import pl.rafalmiskiewicz.mafia.util.db.User
 import pl.rafalmiskiewicz.mafia.util.db.UserRepository
+import pl.rafalmiskiewicz.mafia.util.db.UserWitchCheckBox
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class NightFragment @Inject constructor(
-) : BaseFragment() {
+) : BaseFragment(), CheckPlayerListener {
 
     private val mViewModel: NightViewModel by viewModels()
+    private lateinit var mAdapter: NightAdapter
 
     private lateinit var binding: FragmentNightBinding
 
@@ -37,20 +39,38 @@ class NightFragment @Inject constructor(
             FragmentNightBinding.inflate(layoutInflater, container, false).apply {
                 lifecycleOwner = viewLifecycleOwner
                 viewModel = mViewModel
-                playerCharacterListRecycle.adapter = NightAdapter(mViewModel.characterMap)
             }
 
         initCharactersListInPlay()
         initObservers()
         initDao()
+        initAdapter()
 
         readAllData.observe(
             viewLifecycleOwner
         ) { user ->
-            mViewModel.playerList.value = user
+            mViewModel.playerList.value = user.map { user ->
+                UserWitchCheckBox(
+                    isSelected = false,
+                    user = user
+                )
+            }
         }
 
         return binding.root
+    }
+
+    private fun initAdapter() {
+        mAdapter = NightAdapter(
+            characterMap = mViewModel.characterMap,
+            checkPlayerListener = this@NightFragment
+        )
+        binding.playerCharacterListRecycle.adapter = mAdapter
+        mViewModel.playerList.observe(viewLifecycleOwner) { newList ->
+            requireActivity().runOnUiThread {
+                mAdapter.updateData(newList)
+            }
+        }
     }
 
     fun initDao() {
@@ -66,10 +86,9 @@ class NightFragment @Inject constructor(
 
     fun initCharactersListInPlay() {
         mViewModel.playerList.observe(viewLifecycleOwner) {
-            mViewModel.charactersListInPlay = it.map {user ->
-                Log.i("RMRM", "RMRM "+"initCharactersListInPlay() called with: user = $user")
-                val characterId = user.character
-                val priority = mViewModel.characterMap.get(user.character)?.prority
+            mViewModel.charactersListInPlay = it.map { user ->
+                val characterId = user.user.character
+                val priority = mViewModel.characterMap.get(user.user.character)?.prority
                 Pair(characterId, priority)
             }.sortedBy { it.second }
                 .map { it.first }
@@ -95,8 +114,8 @@ class NightFragment @Inject constructor(
     }
 
     private fun makeSpecialActionCharacter(userId: Int, chosenId: Int) {
-        mViewModel.playerList.value?.find { it.id == userId }?.let {
-            mViewModel.characterMap.get(it.character)?.makeSpecificAction(chosenId - 1)
+        mViewModel.playerList.value?.find { it.user.id == userId }?.let {
+            mViewModel.characterMap.get(it.user.character)?.makeSpecificAction(chosenId - 1)
         }
     }
 
@@ -112,6 +131,10 @@ class NightFragment @Inject constructor(
         lifecycleScope.launch {
             mViewModel.initDatabase.updateIsPlayerDead(userId, true)
         }
+    }
+
+    override fun onItemClick(position: Int, isSelected: Boolean) {
+        Log.i("RMRM", "RMRM "+"onItemClick() called with: position = $position, isSelected = $isSelected")
     }
 
 }

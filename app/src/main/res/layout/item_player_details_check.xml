@@ -1,18 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_gravity="center_horizontal">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <CheckBox
-        android:id="@+id/checkBox"
+    <data>
+
+        <variable
+            name="item"
+            type="pl.rafalmiskiewicz.mafia.util.db.UserWitchCheckBox" />
+
+        <variable
+            name="listener"
+            type="pl.rafalmiskiewicz.mafia.ui.night.CheckPlayerListener" />
+    </data>
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1" />
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal">
 
-    <include
-        android:id="@+id/player_character_details"
-        layout="@layout/item_player_details" />
+        <CheckBox
+            android:id="@+id/checkBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onCheckedChanged="@{(cb, isChecked) -> listener.onItemClick( item.user.id, isChecked)}" />
 
-</LinearLayout>
+        <include
+            android:id="@+id/player_character_details"
+            layout="@layout/item_player_details" />
+
+    </LinearLayout>
+</layout>

@@ -101,7 +101,6 @@ class CharacterListFragment @Inject constructor() : BaseFragment() {
                 characterList.removeLast()
             }
         }
-        Timber.i("RMRM characters: ${playerList}")
         if (playerList.size > 0 && playerList.find { it.character == -1 } == null) {
             viewLifecycleOwner.lifecycleScope.launch {
                 repository.updateUsers(playerList)

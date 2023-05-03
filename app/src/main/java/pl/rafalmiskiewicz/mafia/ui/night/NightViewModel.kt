@@ -8,6 +8,7 @@ import pl.rafalmiskiewicz.mafia.ui.base.BaseViewModel
 import pl.rafalmiskiewicz.mafia.ui.base.ClickType
 import pl.rafalmiskiewicz.mafia.util.db.User
 import pl.rafalmiskiewicz.mafia.util.db.UserDao
+import pl.rafalmiskiewicz.mafia.util.db.UserWitchCheckBox
 import pl.rafalmiskiewicz.mafia.util.db.character.CharacterInt
 import javax.inject.Inject
 
@@ -20,7 +21,7 @@ class NightViewModel @Inject constructor(
     var charactersListInPlay = listOf<Int>()
     val characterPointerTurn = 0
     val isNight = true
-    val playerList = MutableLiveData<List<User>>()
+    val playerList = MutableLiveData<List<UserWitchCheckBox>>()
 
     fun onProfileClicked(type: ClickType, id: Int) {
         sendEvent(NightEvent.KillPlayer(id))

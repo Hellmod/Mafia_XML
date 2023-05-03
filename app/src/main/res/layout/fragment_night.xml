@@ -25,15 +25,13 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/playerCharacterListRecycle"
-            data="@{viewModel.playerList}"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toTopOf="@+id/button_test"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/instructionForGameMasetr"
-            app:onProfileClicked="@{viewModel::onProfileClicked}" />
+            app:layout_constraintTop_toBottomOf="@+id/instructionForGameMasetr" />
 
         <Button
             android:id="@+id/button_next"

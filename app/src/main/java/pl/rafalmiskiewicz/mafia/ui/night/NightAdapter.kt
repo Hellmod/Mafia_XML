@@ -1,75 +1,64 @@
 package pl.rafalmiskiewicz.mafia.ui.night
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import pl.rafalmiskiewicz.mafia.databinding.ItemPlayerDetailsBinding
+import androidx.recyclerview.widget.RecyclerView
 import pl.rafalmiskiewicz.mafia.databinding.ItemPlayerDetailsCheckBinding
-import pl.rafalmiskiewicz.mafia.ui.base.BaseAdapter
-import pl.rafalmiskiewicz.mafia.ui.base.BaseHolder
-import pl.rafalmiskiewicz.mafia.ui.base.OnRecyclerListener
 import pl.rafalmiskiewicz.mafia.ui.base.ProductCommonClick
-import pl.rafalmiskiewicz.mafia.util.db.User
+import pl.rafalmiskiewicz.mafia.util.db.UserWitchCheckBox
 import pl.rafalmiskiewicz.mafia.util.db.character.CharacterInt
 
-class NightAdapter(val characterMap: HashMap<Int, CharacterInt>) : BaseAdapter<User>() {
+class NightAdapter(
+    val characterMap: HashMap<Int, CharacterInt>,
+    val checkPlayerListener: CheckPlayerListener
+) : RecyclerView.Adapter<NightAdapter.ViewHolder>() {
 
-    private var onPlayerClickListener: OnRecyclerListener? = null
+    private var items: List<UserWitchCheckBox> = emptyList()
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): BaseHolder<User> {
-        return DoctorsListHolder(
-            ItemPlayerDetailsCheckBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            ), characterMap
-        )
+    // ViewHolder class
+    inner class ViewHolder(val binding: ItemPlayerDetailsCheckBinding) : RecyclerView.ViewHolder(binding.root)
+
+    // onCreateViewHolder
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        val binding = ItemPlayerDetailsCheckBinding.inflate(inflater, parent, false)
+        return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: BaseHolder<User>, position: Int) {
-        (holder as DoctorsListHolder).bind(
-            items[position],
-            onRecyclerListener,
-            onPlayerClickListener
-        )
-    }
+    // onBindViewHolder
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val item = items[position]
+        Log.i("RMRM", "RMRM "+"onBindViewHolder() called with: item = $item")
+        holder.binding.item = item
+        holder.binding.listener = checkPlayerListener
+        holder.binding.executePendingBindings()
 
-    fun setonPlayerClickListener(listener: OnRecyclerListener?) {
-        this.onPlayerClickListener = listener
-    }
+        holder.binding.apply {
 
-    class DoctorsListHolder(private val itemBinding: ItemPlayerDetailsCheckBinding, val characterMap: HashMap<Int, CharacterInt>) :
-        BaseHolder<User>(itemBinding.root), PlayerListBinder {
+            playerCharacterDetails.playerCharacter.player.playerName.text = item.user.name
+            playerCharacterDetails.playerCharacter.player.playerId.text = item.user.id.toString()
+            playerCharacterDetails.playerCharacter.characterName.text = characterMap.get(item.user.character)?.name
+            playerCharacterDetails.characterAlive.text = if (item.user.isPlayerDead) "Dead" else "Alive"
 
-        override fun bind(item: User, listener: OnRecyclerListener?) = Unit
-
-        override fun bind(
-            item: User,
-            listener: OnRecyclerListener?,
-            playerListener: OnRecyclerListener?
-        ) {
-            itemBinding.apply {
-                playerCharacterDetails.playerCharacter.player.playerName.text = item.name
-                playerCharacterDetails.playerCharacter.player.playerName.setOnClickListener {
-                    playerListener?.onClick(
-                        ProductCommonClick.ItemClick,
-                        item.id
-                    )
-                }
-                playerCharacterDetails.playerCharacter.player.playerId.text = item.id.toString()
-                playerCharacterDetails.playerCharacter.characterName.text = characterMap.get(item.character)?.name
-                playerCharacterDetails.characterAlive.text = if (item.isPlayerDead) "Dead" else "Alive"
-            }
         }
     }
 
-    interface PlayerListBinder {
-
-        fun bind(
-            item: User, listener: OnRecyclerListener?,
-            profileListener: OnRecyclerListener?
-        )
+    // getItemCount
+    override fun getItemCount(): Int {
+        return items.size
     }
+
+    // Update data
+    fun updateData(newItems: List<UserWitchCheckBox>) {
+        Log.i("RMRM", "RMRM "+"updateData() called with: newItems = $newItems")
+        items = newItems
+        notifyDataSetChanged()
+    }
+
+}
+
+interface CheckPlayerListener {
+
+    fun onItemClick(position: Int, isSelected: Boolean)
 }

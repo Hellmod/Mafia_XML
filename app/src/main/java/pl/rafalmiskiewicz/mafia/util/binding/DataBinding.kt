@@ -26,11 +26,6 @@ fun setOnPlayerClickListeners(
             onPlayerClicked
         )
     }
-    if (recyclerView.adapter is NightAdapter) {
-        (recyclerView.adapter as NightAdapter).setonPlayerClickListener(
-            onPlayerClicked
-        )
-    }
 }
 
 @BindingAdapter("onRecyclerClick")
