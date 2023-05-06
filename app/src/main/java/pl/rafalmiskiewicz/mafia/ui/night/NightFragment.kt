@@ -133,8 +133,10 @@ class NightFragment @Inject constructor(
         }
     }
 
-    override fun onItemClick(position: Int, isSelected: Boolean) {
-        Log.i("RMRM", "RMRM "+"onItemClick() called with: position = $position, isSelected = $isSelected")
+    override fun onItemClick(userId: Int, isSelected: Boolean) {
+        mViewModel.playerList.value?.find { it.user.id == userId }?.let {
+            it.isSelected = isSelected
+        }
     }
 
 }

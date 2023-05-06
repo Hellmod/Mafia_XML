@@ -29,7 +29,6 @@ class NightAdapter(
     // onBindViewHolder
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
-        Log.i("RMRM", "RMRM "+"onBindViewHolder() called with: item = $item")
         holder.binding.item = item
         holder.binding.listener = checkPlayerListener
         holder.binding.executePendingBindings()

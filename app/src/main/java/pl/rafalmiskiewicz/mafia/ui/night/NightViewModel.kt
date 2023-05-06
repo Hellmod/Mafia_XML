@@ -32,7 +32,7 @@ class NightViewModel @Inject constructor(
     }
 
     fun onTestsClicked() {
-        Log.i("RMRM", "RMRM "+"onTestsClicked() called charactersListInPlay: $charactersListInPlay")
+        Log.i("RMRM", "RMRM "+"onTestsClicked() called charactersListInPlay: ${playerList.value}")
         sendEvent(NightEvent.OnTestsClick)
     }
 }
