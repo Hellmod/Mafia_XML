@@ -66,6 +66,13 @@ class NightFragment @Inject constructor(
         return binding.root
     }
 
+    private fun initInstructions() {
+        mViewModel.characterMap[mViewModel.charactersListInPlay[mViewModel.characterPointerTurn]]
+            ?.let { character ->
+                binding.instructionForGameMasetr.text = character.instruction
+            }
+    }
+
     private fun initAdapter() {
         mAdapter = NightAdapter(
             characterMap = mViewModel.characterMap,
@@ -99,6 +106,7 @@ class NightFragment @Inject constructor(
             }.sortedBy { it.second }
                 .map { it.first }
                 .distinct()
+            initInstructions()
         }
     }
 
@@ -117,15 +125,16 @@ class NightFragment @Inject constructor(
     private fun makeSpecialActionCharacter(idSelectedUsers: List<Int>) {
         mViewModel.characterMap[mViewModel.charactersListInPlay[mViewModel.characterPointerTurn]]
             ?.let { character ->
-                Log.d("NightFragment", "makeSpecialActionCharacter: $character")
                 val correct = character.makeSpecialAction(idSelectedUsers)
-                Log.d("NightFragment", "makeSpecialActionCharacter: $correct")
                 if (!correct) {
                     Toast.makeText(
                         requireContext(),
                         "Nie udało się wykonać akcji",
                         Toast.LENGTH_LONG
                     ).show()
+                }
+                else{
+                    mViewModel.characterPointerTurn++
                 }
             }
     }

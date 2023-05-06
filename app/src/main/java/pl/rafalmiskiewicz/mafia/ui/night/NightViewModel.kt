@@ -21,7 +21,7 @@ class NightViewModel @Inject constructor(
 ) : BaseViewModel<NightEvent>() {
 
     var charactersListInPlay = listOf<Int>()
-    val characterPointerTurn = 0
+    var characterPointerTurn = 0
     val isNight = true
     val playerList = MutableLiveData<List<UserWitchCheckBox>>()
 

@@ -13,6 +13,7 @@ class Pirates(
     override val name = "Pirat"
     override var wakeInNight: Boolean = true
     override var prority: Float = 1f
+    override var instruction: String = "Wybierz gracza, którego chcesz zabić."
 
     override fun makeSpecialAction(idSelectedUsers: List<Int>): Boolean {
         Log.i("RMRM", "RMRM " + "$name makeSpecialAction() called with: idSelectedUsers = $idSelectedUsers")
