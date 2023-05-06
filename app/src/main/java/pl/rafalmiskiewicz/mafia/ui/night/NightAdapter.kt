@@ -39,6 +39,7 @@ class NightAdapter(
             playerCharacterDetails.playerCharacter.player.playerId.text = item.user.id.toString()
             playerCharacterDetails.playerCharacter.characterName.text = characterMap.get(item.user.character)?.name
             playerCharacterDetails.characterAlive.text = if (item.user.isPlayerDead) "Dead" else "Alive"
+            checkBox.isSelected = item.isSelected
 
         }
     }

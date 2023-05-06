@@ -4,6 +4,8 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import pl.rafalmiskiewicz.mafia.ui.base.BaseViewModel
 import pl.rafalmiskiewicz.mafia.ui.base.ClickType
 import pl.rafalmiskiewicz.mafia.util.db.User
@@ -33,5 +35,14 @@ class NightViewModel @Inject constructor(
     fun onTestsClicked() {
         Log.i("RMRM", "RMRM " + "onTestsClicked() called charactersListInPlay: ${playerList.value}")
         sendEvent(NightEvent.OnTestsClick)
+        resurrectAll()
+    }
+
+    private fun resurrectAll() {
+        GlobalScope.launch {
+            playerList.value?.forEach {
+                initDatabase.updateIsPlayerDead(it.user.id, false)
+            }
+        }
     }
 }

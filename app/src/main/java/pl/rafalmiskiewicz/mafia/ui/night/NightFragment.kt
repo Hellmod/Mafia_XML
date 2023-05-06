@@ -1,9 +1,11 @@
 package pl.rafalmiskiewicz.mafia.ui.night
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
@@ -49,7 +51,12 @@ class NightFragment @Inject constructor(
             viewLifecycleOwner
         ) { user ->
             mViewModel.playerList.value = user.map { user ->
-                UserWitchCheckBox(
+                mViewModel.playerList.value?.find { it.user.id == user.id }?.let {
+                    UserWitchCheckBox(
+                        isSelected = it.isSelected,
+                        user = user
+                    )
+                } ?: UserWitchCheckBox(
                     isSelected = false,
                     user = user
                 )
@@ -110,7 +117,16 @@ class NightFragment @Inject constructor(
     private fun makeSpecialActionCharacter(idSelectedUsers: List<Int>) {
         mViewModel.characterMap[mViewModel.charactersListInPlay[mViewModel.characterPointerTurn]]
             ?.let { character ->
-                character.makeSpecialAction(idSelectedUsers)
+                Log.d("NightFragment", "makeSpecialActionCharacter: $character")
+                val correct = character.makeSpecialAction(idSelectedUsers)
+                Log.d("NightFragment", "makeSpecialActionCharacter: $correct")
+                if (!correct) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Nie udało się wykonać akcji",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
             }
     }
 
@@ -118,15 +134,10 @@ class NightFragment @Inject constructor(
 
     }
 
-    private fun killPlayer(userId: Int) {
-        lifecycleScope.launch {
-            mViewModel.initDatabase.updateIsPlayerDead(userId, true)
-        }
-    }
-
     override fun onItemClick(userId: Int, isSelected: Boolean) {
         mViewModel.playerList.value?.find { it.user.id == userId }?.let {
             it.isSelected = isSelected
+            // mAdapter.notifyItemChanged(userId)
         }
     }
 

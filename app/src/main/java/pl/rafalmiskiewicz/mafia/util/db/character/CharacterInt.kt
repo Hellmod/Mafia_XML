@@ -6,5 +6,5 @@ abstract class CharacterInt() {
     abstract var wakeInNight: Boolean
     abstract var prority: Float
 
-    abstract fun makeSpecialAction(idSelectedUsers: List<Int>)
+    abstract fun makeSpecialAction(idSelectedUsers: List<Int>):Boolean
 }
