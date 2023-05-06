@@ -1,7 +1,6 @@
 package pl.rafalmiskiewicz.mafia.ui.night
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -98,29 +97,21 @@ class NightFragment @Inject constructor(
 
     private fun handleEvent(event: NightEvent) {
         when (event) {
-            NightEvent.OnNextClick -> {
-                onNextClick()
+            is NightEvent.OnNextClick -> {
+                makeSpecialActionCharacter(event.idSelectedUsers)
             }
 
             NightEvent.OnTestsClick -> {
                 nTestsClick()
             }
+        }
+    }
 
-            is NightEvent.KillPlayer -> {
-                makeSpecialActionCharacter(event.userId, event.userId)
-                //killPlayer(event.userId)
+    private fun makeSpecialActionCharacter(idSelectedUsers: List<Int>) {
+        mViewModel.characterMap[mViewModel.charactersListInPlay[mViewModel.characterPointerTurn]]
+            ?.let { character ->
+                character.makeSpecialAction(idSelectedUsers)
             }
-        }
-    }
-
-    private fun makeSpecialActionCharacter(userId: Int, chosenId: Int) {
-        mViewModel.playerList.value?.find { it.user.id == userId }?.let {
-            mViewModel.characterMap.get(it.user.character)?.makeSpecificAction(chosenId - 1)
-        }
-    }
-
-    private fun onNextClick() {
-
     }
 
     private fun nTestsClick() {

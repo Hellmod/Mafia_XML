@@ -2,8 +2,7 @@ package pl.rafalmiskiewicz.mafia.ui.night
 
 import pl.rafalmiskiewicz.mafia.util.event.BaseEvent
 
-sealed class NightEvent : BaseEvent{
-    object OnNextClick : NightEvent()
+sealed class NightEvent : BaseEvent {
+    class OnNextClick(val idSelectedUsers: List<Int>) : NightEvent()
     object OnTestsClick : NightEvent()
-    class KillPlayer(val userId: Int) : NightEvent()
 }

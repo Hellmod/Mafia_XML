@@ -23,16 +23,15 @@ class NightViewModel @Inject constructor(
     val isNight = true
     val playerList = MutableLiveData<List<UserWitchCheckBox>>()
 
-    fun onProfileClicked(type: ClickType, id: Int) {
-        sendEvent(NightEvent.KillPlayer(id))
-    }
-
     fun onNextClicked() {
-        sendEvent(NightEvent.OnNextClick)
+        playerList.value?.let {
+            val idSelectedUsers = it.filter { it.isSelected == true }.map { it.user.id }
+            sendEvent(NightEvent.OnNextClick(idSelectedUsers))
+        }
     }
 
     fun onTestsClicked() {
-        Log.i("RMRM", "RMRM "+"onTestsClicked() called charactersListInPlay: ${playerList.value}")
+        Log.i("RMRM", "RMRM " + "onTestsClicked() called charactersListInPlay: ${playerList.value}")
         sendEvent(NightEvent.OnTestsClick)
     }
 }
