@@ -2,13 +2,10 @@ package pl.rafalmiskiewicz.mafia.ui.night
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import pl.rafalmiskiewicz.mafia.ui.base.BaseViewModel
-import pl.rafalmiskiewicz.mafia.ui.base.ClickType
-import pl.rafalmiskiewicz.mafia.util.db.User
 import pl.rafalmiskiewicz.mafia.util.db.UserDao
 import pl.rafalmiskiewicz.mafia.util.db.UserWitchCheckBox
 import pl.rafalmiskiewicz.mafia.util.db.character.CharacterInt
@@ -21,7 +18,7 @@ class NightViewModel @Inject constructor(
 ) : BaseViewModel<NightEvent>() {
 
     var charactersListInPlay = listOf<Int>()
-    var characterPointerTurn = 0
+    val characterPointerTurn = MutableLiveData(-1)
     val isNight = true
     val playerList = MutableLiveData<List<UserWitchCheckBox>>()
 
@@ -44,5 +41,24 @@ class NightViewModel @Inject constructor(
                 initDatabase.updateIsPlayerDead(it.user.id, false)
             }
         }
+    }
+
+    fun calculateCharactersListInPlay() {
+        playerList.value?.let {
+            charactersListInPlay = it.map { user ->
+                val characterId = user.user.character
+                val priority = characterMap.get(user.user.character)?.prority
+                Pair(characterId, priority)
+            }.sortedBy { it.second }
+                .map { it.first }
+                .distinct()
+        }
+        if(charactersListInPlay.isNotEmpty() && characterPointerTurn.value == -1) {
+            characterPointerTurn.value = 0
+        }
+    }
+
+    fun nextCharacter() {
+        characterPointerTurn.value = (characterPointerTurn.value?.plus(1)) ?: (-1)
     }
 }
