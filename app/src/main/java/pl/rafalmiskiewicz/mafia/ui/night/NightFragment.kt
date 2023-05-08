@@ -43,6 +43,7 @@ class NightFragment @Inject constructor(
         initObservers()
         initDao()
         initAdapter()
+        observDayPart()
 
         readAllData.observe(
             viewLifecycleOwner
@@ -63,9 +64,22 @@ class NightFragment @Inject constructor(
         return binding.root
     }
 
+    private fun observDayPart() {
+        mViewModel.dayPart.observe(viewLifecycleOwner) { dayPart ->
+            if (dayPart == DayPart.DAY) {
+                binding.instructionForGameMasetr.text = "Obudź wszystkich graczy"
+            }
+        }
+    }
+
     private fun initInstructions() {
         mViewModel.characterPointerTurn.observe(viewLifecycleOwner) { characterPointerTurn ->
             if (characterPointerTurn < 0) return@observe
+            if(characterPointerTurn >= mViewModel.charactersListInPlay.size) {
+                mViewModel.endNight()
+                return@observe
+            }
+
             val character = mViewModel.characterMap[mViewModel.charactersListInPlay[characterPointerTurn]]
             binding.instructionForGameMasetr.text = character?.instruction
         }
@@ -128,6 +142,7 @@ class NightFragment @Inject constructor(
     fun afterAction(isActionSuccess: Boolean) {
         if (isActionSuccess) {
             mViewModel.nextCharacter()
+            mAdapter.notifyDataSetChanged()
         } else {
             Toast.makeText(
                 requireContext(),

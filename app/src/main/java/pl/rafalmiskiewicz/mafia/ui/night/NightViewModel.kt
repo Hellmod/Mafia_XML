@@ -19,7 +19,7 @@ class NightViewModel @Inject constructor(
 
     var charactersListInPlay = listOf<Int>()
     val characterPointerTurn = MutableLiveData(-1)
-    val isNight = true
+    val dayPart = MutableLiveData(DayPart.NIGHT)
     val playerList = MutableLiveData<List<UserWitchCheckBox>>()
 
     fun onNextClicked() {
@@ -45,20 +45,34 @@ class NightViewModel @Inject constructor(
 
     fun calculateCharactersListInPlay() {
         playerList.value?.let {
-            charactersListInPlay = it.map { user ->
-                val characterId = user.user.character
-                val priority = characterMap.get(user.user.character)?.prority
-                Pair(characterId, priority)
-            }.sortedBy { it.second }
+            charactersListInPlay = it.filter { user ->
+                val wakeInNight = characterMap.get(user.user.character)?.wakeInNight ?: false
+                wakeInNight
+            }
+                .map { user ->
+                    val characterId = user.user.character
+                    val priority = characterMap.get(user.user.character)?.prority
+                    Pair(characterId, priority)
+                }.sortedBy { it.second }
                 .map { it.first }
                 .distinct()
         }
-        if(charactersListInPlay.isNotEmpty() && characterPointerTurn.value == -1) {
+        if (charactersListInPlay.isNotEmpty() && characterPointerTurn.value == -1) {
             characterPointerTurn.value = 0
         }
     }
 
     fun nextCharacter() {
+        playerList.value?.let {
+            playerList.value = it.map { user ->
+                user.isSelected = false
+                user
+            }
+        }
         characterPointerTurn.value = (characterPointerTurn.value?.plus(1)) ?: (-1)
+    }
+
+    fun endNight() {
+        dayPart.value = DayPart.DAY
     }
 }
