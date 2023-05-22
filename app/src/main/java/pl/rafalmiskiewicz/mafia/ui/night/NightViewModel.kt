@@ -9,12 +9,14 @@ import pl.rafalmiskiewicz.mafia.ui.base.BaseViewModel
 import pl.rafalmiskiewicz.mafia.util.db.UserDao
 import pl.rafalmiskiewicz.mafia.util.db.UserWitchCheckBox
 import pl.rafalmiskiewicz.mafia.util.db.character.CharacterInt
+import pl.rafalmiskiewicz.mafia.util.model.GameState
 import javax.inject.Inject
 
 @HiltViewModel
 class NightViewModel @Inject constructor(
     val initDatabase: UserDao,
-    val characterMap: HashMap<Int, CharacterInt>
+    val characterMap: HashMap<Int, CharacterInt>,
+    val gameState: GameState
 ) : BaseViewModel<NightEvent>() {
 
     var charactersListInPlay = listOf<Int>()
@@ -62,14 +64,6 @@ class NightViewModel @Inject constructor(
         }
     }
 
-    fun isGameEnd(): Boolean {
-        val numberAliveEvil =
-            playerList.value?.filter { !it.user.isPlayerDead && it.user.character.toCharacter().isEvil }?.map { it.user.id }?.size ?: 0
-        val numberAliveGood =
-            playerList.value?.filter { !it.user.isPlayerDead && it.user.character.toCharacter().isEvil }?.map { it.user.id }?.size ?: 0
-        return numberAliveEvil >= 1 && numberAliveGood >= 1
-    }
-
     fun nextCharacter() {
         playerList.value?.let {
             playerList.value = it.map { user ->
@@ -78,14 +72,10 @@ class NightViewModel @Inject constructor(
             }
         }
         characterPointerTurn.value = (characterPointerTurn.value?.plus(1)) ?: (-1)
-        Log.i("RMRM", "RMRM "+"nextCharacter() called isGameEnd: ${isGameEnd()}")
+        Log.i("RMRM", "RMRM " + "nextCharacter() called isGameEnd: ${gameState.isGameEnd()}")
     }
 
     fun endNight() {
         dayPart.value = DayPart.DAY
-    }
-
-    fun Int.toCharacter(): CharacterInt {
-        return characterMap.get(this)!!
     }
 }

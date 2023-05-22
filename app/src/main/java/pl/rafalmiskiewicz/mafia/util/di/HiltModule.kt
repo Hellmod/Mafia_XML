@@ -1,4 +1,4 @@
-package pl.rafalmiskiewicz.mafia.util.hilt
+package pl.rafalmiskiewicz.mafia.util.di
 
 import android.app.Application
 import androidx.room.Room
@@ -12,7 +12,7 @@ import pl.rafalmiskiewicz.mafia.util.db.UserDatabase
 import pl.rafalmiskiewicz.mafia.util.db.character.CharacterInt
 import pl.rafalmiskiewicz.mafia.util.db.character.Pirates
 import pl.rafalmiskiewicz.mafia.util.db.character.Sailor
-import javax.inject.Singleton
+import pl.rafalmiskiewicz.mafia.util.model.GameState
 
 @Module
 @InstallIn(ViewModelComponent::class)
@@ -39,5 +39,19 @@ object AppModule {
         return HashMap<Int, CharacterInt>(mutableMap.size).apply {
             putAll(mutableMap)
         }
+    }
+
+    @Provides
+    @ViewModelScoped
+    fun provideGameState(
+        dao: UserDao,
+        map: HashMap<Int, CharacterInt>
+    ): GameState {
+
+        return GameState(
+            initDatabase = dao,
+            characterMap = map
+        )
+
     }
 }

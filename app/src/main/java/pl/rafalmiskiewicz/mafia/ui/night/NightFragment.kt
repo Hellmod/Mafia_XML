@@ -75,7 +75,7 @@ class NightFragment @Inject constructor(
     private fun initInstructions() {
         mViewModel.characterPointerTurn.observe(viewLifecycleOwner) { characterPointerTurn ->
             if (characterPointerTurn < 0) return@observe
-            if(characterPointerTurn >= mViewModel.charactersListInPlay.size) {
+            if (characterPointerTurn >= mViewModel.charactersListInPlay.size) {
                 mViewModel.endNight()
                 return@observe
             }
@@ -92,6 +92,8 @@ class NightFragment @Inject constructor(
         )
         binding.playerCharacterListRecycle.adapter = mAdapter
         mViewModel.playerList.observe(viewLifecycleOwner) { newList ->
+            mViewModel.gameState.playerList.value = newList
+
             requireActivity().runOnUiThread {
                 mAdapter.updateData(newList)
             }
@@ -141,6 +143,13 @@ class NightFragment @Inject constructor(
 
     fun afterAction(isActionSuccess: Boolean) {
         if (isActionSuccess) {
+            if(mViewModel.gameState.isGameEnd()){
+                Toast.makeText(
+                    requireContext(),
+                    "Gra się skończyła",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
             mViewModel.nextCharacter()
             mAdapter.notifyDataSetChanged()
         } else {
