@@ -12,6 +12,7 @@ class Sailor(
 
     override val name = "Marynarz"
     override var wakeInNight: Boolean = false
+    override var isEvil: Boolean = false
     override var prority: Float = 1f
     override var instruction: String = "Marynarz nie ma specjalnej akcji."
 

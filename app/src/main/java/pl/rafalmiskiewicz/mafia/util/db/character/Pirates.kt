@@ -12,6 +12,7 @@ class Pirates(
 
     override val name = "Pirat"
     override var wakeInNight: Boolean = true
+    override var isEvil: Boolean = true
     override var prority: Float = 1f
     override var instruction: String = "Wybierz gracza, którego chcesz zabić."
 

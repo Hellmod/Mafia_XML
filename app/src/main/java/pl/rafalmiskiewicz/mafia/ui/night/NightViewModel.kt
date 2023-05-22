@@ -62,6 +62,14 @@ class NightViewModel @Inject constructor(
         }
     }
 
+    fun isGameEnd(): Boolean {
+        val numberAliveEvil =
+            playerList.value?.filter { !it.user.isPlayerDead && it.user.character.toCharacter().isEvil }?.map { it.user.id }?.size ?: 0
+        val numberAliveGood =
+            playerList.value?.filter { !it.user.isPlayerDead && it.user.character.toCharacter().isEvil }?.map { it.user.id }?.size ?: 0
+        return numberAliveEvil >= 1 && numberAliveGood >= 1
+    }
+
     fun nextCharacter() {
         playerList.value?.let {
             playerList.value = it.map { user ->
@@ -70,9 +78,14 @@ class NightViewModel @Inject constructor(
             }
         }
         characterPointerTurn.value = (characterPointerTurn.value?.plus(1)) ?: (-1)
+        Log.i("RMRM", "RMRM "+"nextCharacter() called isGameEnd: ${isGameEnd()}")
     }
 
     fun endNight() {
         dayPart.value = DayPart.DAY
+    }
+
+    fun Int.toCharacter(): CharacterInt {
+        return characterMap.get(this)!!
     }
 }
